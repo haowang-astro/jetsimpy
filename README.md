@@ -4,7 +4,7 @@ Hydrodynamic simulations of relativistic blastwave with tabulated angular energy
 Code paper: [Wang et al. 2024](https://arxiv.org/abs/2402.19359).
 
 ## Important changes (4. 26. 2024)
-I mostly rewrote the package for better code readability, better user interface, better code structure, and (perhaps) better performance. Many variables and functions are renamed, so make sure you update the code to the latest version.
+I mostly rewrite the package for better code readability, better user interface, better code structure, and (perhaps) better performance. Many variables and functions are renamed, so make sure you update the code to the latest version.
 
 I will try my best to keep the interface unchanged from now on.
 
