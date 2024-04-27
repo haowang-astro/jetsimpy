@@ -8,6 +8,22 @@ I mostly rewrite the package for better code readability, better user interface,
 
 I will try my best to keep the interface unchanged from now on.
 
+## Features
+
+### These features are currently supported:
+* Tabulated angular energy profile
+* Tabulated angular Lorentz factor profile
+* ISM / wind / mixed external density profile: $n=n_{\rm ism}+n_{\rm wind}(r/10^{17}{\rm cm})^{-2}$
+* Synthetic afterglow light curves
+* Apparent superluminal motion
+* Sky map and Gaussian equivalent image size
+
+Additionally, you can add your own emissivity model by defining a lambda function in a [c++ source file](jetsimpy/src/Afterglow/models.cpp). This might be helpful if you have a more complicated model such as Synchrotron self-absorption or other cool stuffs. After adding your own model, just install the package as usual and refer to this model with its model name from Python side.
+
+### These features are not supported yet:
+* Reverse shock
+* Energy injection
+
 ## Installation 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install jetsimpy.
 ```bash
@@ -19,7 +35,7 @@ Clean up the installation directory. This help avoid conflicts for future instal
 python setup.py clean
 ```
 
-You may install the package and clean up the directory with one line:
+You may install the package and clean up the directory by a single line:
 ```bash
 pip install . && python setup.py clean
 ```
