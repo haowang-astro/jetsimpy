@@ -19,6 +19,11 @@ Clean up the installation directory. This help avoid conflicts for future instal
 python setup.py clean
 ```
 
+You may install the package and clean up the directory with one line:
+```bash
+pip install . && python setup.py clean
+```
+
 ## Quickstart
 ```Python
 import numpy as np
