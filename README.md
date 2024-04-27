@@ -14,7 +14,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install jetsimp
 pip install .
 ```
 
-Clean up the installation directory. This avoid conflicts for future installations.
+Clean up the installation directory. This help avoid conflicts for future installations.
 ```bash
 python setup.py clean
 ```
