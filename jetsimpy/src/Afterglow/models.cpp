@@ -1,17 +1,17 @@
 #include "models.h"
 
 void Models::registerEmissivity() {
-    // The template of a integration model:
+    // The template of a emissivity model:
     //
     // emissivity_models["model_name"] = [](    // "model_name" is the keyword used from Python side
-    //    const double& nu,              // frequency
+    //    const double nu,               // frequency
     //    const Dict& P,                 // parameter dictionary from Python side
-    //    const Blast& blast,            // fluid element properties of the blast
+    //    const Blast& blast,            // an object that contains all fluid element properties
     // ) {
     //
     //     ...
     //
-    //     return emissivity;            // return value is a "double"
+    //     return emissivity;            // return value must be a "double"
     // }
 
     // ---------- default radiation model (Sari 1998) ---------- //
@@ -24,7 +24,6 @@ void Models::registerEmissivity() {
         double t = blast.t;
         double gamma = blast.gamma;
         double e = blast.e_density;
-        double sin_theta_beta_sq = 1.0 - blast.cos_theta_beta * blast.cos_theta_beta;
     
         double emissivity;
         double gamma_m, gamma_c, B, nu_m, nu_c, e_p;
@@ -62,7 +61,7 @@ void Models::registerEmissivity() {
         return emissivity;
     };
 
-    // deep newtonian phase correction
+    // Bonus! deep newtonian phase correction
     emissivity_models["sync_dnp"] = [](const double nu, const Dict& P, const Blast& blast) {
         double eps_e = P.at("eps_e");
         double eps_b = P.at("eps_b");
@@ -72,7 +71,6 @@ void Models::registerEmissivity() {
         double t = blast.t;
         double gamma = blast.gamma;
         double e = blast.e_density;
-        double sin_theta_beta_sq = 1.0 - blast.cos_theta_beta * blast.cos_theta_beta;
     
         double emissivity;
         double gamma_m, gamma_c, B, nu_m, nu_c, e_p;
@@ -122,6 +120,7 @@ void Models::registerEmissivity() {
     // }
 }
 
+// weighted average models
 void Models::registerAvgModels() {
     // for offset
     avg_models["offset"] = [](const double nu, const Dict& P, const Blast& blast) {
