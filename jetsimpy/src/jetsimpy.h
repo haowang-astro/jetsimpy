@@ -32,12 +32,14 @@ public:
     void configParameters(const Dict& param);              // configurate parameter dictionary
     void configEmissivity(const std::string& model_name);  // configurate emissivity model
     void configAvgModel(const std::string& model_name);    // configure average models
-    double calculateIntensity(double Tobs, double nu, double theta, double phi);
+    double calculateEATS(double Tobs, double theta, double phi, double theta_v, double z);    // calculate t of EATS
+    double calculateIntensity(double Tobs, double nu, double theta, double phi);    // intensity in Jet coordinate
     double calculateLuminosity(double Tobs, double nu, double rtol);    // integrate luminosity
     double calculateAvgModel(double Tobs, double nu, double rtol);      // integrate average model
     double IntensityOfPixel(const double Tobs, const double nu, const double x_tilde, const double y_tilde);
 
 private:
+    JetConfig jet_config;            // configuration data
     Tool tool;                       // the tool containing many functions
     SimBox sim_box;                  // the simulation box
     Interpolator interpolator;       // the interpolation tool

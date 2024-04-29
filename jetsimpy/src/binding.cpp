@@ -1,8 +1,4 @@
-//#include "environment.h"
-//#include "Hydro/config.h"
-//#include "Hydro/sim_box.h"
 #include "jetsimpy.h"
-//#include "Refinement.hpp"
 
 PYBIND11_MODULE(jetsimpy_extension, m) {
     // parameter object
@@ -45,6 +41,7 @@ PYBIND11_MODULE(jetsimpy_extension, m) {
         .def("configParameters", &Jet::configParameters)
         .def("configEmissivity", &Jet::configEmissivity)
         .def("configAvgModel", &Jet::configAvgModel)
+        .def("calculateEATS", py::vectorize(&Jet::calculateEATS))
         .def("calculateIntensity", py::vectorize(&Jet::calculateIntensity))
         .def("calculateLuminosity", py::vectorize(&Jet::calculateLuminosity))
         .def("calculateAvgModel", py::vectorize(&Jet::calculateAvgModel))

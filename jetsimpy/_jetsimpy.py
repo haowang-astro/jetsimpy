@@ -136,7 +136,11 @@ class Jet:
 
     # ---------- Radiation Related ---------- #
 
-    # specific intensity at jet sphreical coordinate [cgs]
+    # Simply calculate time t by equal arrival time surface. Just for fun!
+    def EATS(self, t: NDArray, theta: NDArray, phi: NDArray, theta_v: NDArray, z: NDArray):
+        return self._jet.calculateEATS(t, theta, phi, theta_v, z)
+
+    # specific intensity at jet sphreical coordinate [cgs] Could be useful for debug
     def Intensity(self, t: NDArray, nu: NDArray, theta: NDArray, phi: NDArray, para: Dict[str, float], model="sync") -> NDArray:
         # config parameters
         self._jet.configParameters(para)

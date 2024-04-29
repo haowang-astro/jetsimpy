@@ -1,7 +1,8 @@
 #include "jetsimpy.h"
 
 Jet::Jet(const JetConfig& jet_config)
-  : tool (jet_config),
+  : jet_config (jet_config),
+    tool (jet_config),
     sim_box (jet_config, tool)
 {
 
@@ -130,6 +131,11 @@ double Jet::interpolateE0(double t, double theta) {
 }
 
 // ---------- afterglow calculation ---------- //
+
+double Jet::calculateEATS(double Tobs, double theta, double phi, double theta_v, double z) {
+    double Tobs_z = Tobs / (1.0 + z);
+    return eats.solveEATS(Tobs_z, theta, phi, theta_v);
+}
 
 double Jet::calculateIntensity(double Tobs, double nu, double theta, double phi) {
     return afterglow.Intensity(Tobs, nu, theta, phi);

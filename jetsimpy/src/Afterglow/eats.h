@@ -14,6 +14,9 @@ public:
 
     // solve EATS & blast properties
     void solveBlast(double Tobs_z, double theta, double phi, double theta_v, Blast& blast);
+
+    // simply solve eats
+    double solveEATS(double Tobs_z, double theta, double phi, double theta_v);
     
 private:
     // PDE data
