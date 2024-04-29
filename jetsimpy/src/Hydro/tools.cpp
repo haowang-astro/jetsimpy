@@ -83,5 +83,5 @@ void Tool::findIndex(const Array1D& x_array, const double x, int& index1, int& i
 }
 
 double Tool::linear(double x, double x1, double x2, double y1, double y2) {
-    return (y2 - y1) / (x2 - x1) * (x - x1) + y1;
+    return (x1 == x2) ? y1 : (y2 - y1) / (x2 - x1) * (x - x1) + y1;
 }
