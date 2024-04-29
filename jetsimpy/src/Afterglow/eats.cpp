@@ -160,19 +160,42 @@ void EATS::solveBlast(double Tobs_z, double theta, double phi, double theta_v, B
     int theta_index2;
     findThetaIndex(theta, theta_index1, theta_index2);
 
-    Array1D val;
+    Array1D val, val_l, val_r;
     if (theta_index1 == theta_index2) { // near poles
-        // compute mu
-        double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi) * std::sin(theta_v);
+        // solve val_l
+        {
+            // compute mu within the cell (east hemisphere)
+            double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi) * std::sin(theta_v);
 
-        // solve primitive
-        val = solvePrimitive(mu, Tobs_z, theta_index1);
+            // solve primitive
+            val_l = solvePrimitive(mu, Tobs_z, theta_index1);
+        }
+
+        // solve val_r
+        {
+            // compute mu (negative phi, west hemisphere)
+            double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi + PI) * std::sin(theta_v);
+
+            // solve primitive
+            val_r = solvePrimitive(mu, Tobs_z, theta_index2);
+        }
+        
+        // interpolate val over theta
+        val = Array(6);
+        for (int i = 0; i < 6; ++i) {
+            val[i] = tool->linear(
+                theta,
+                (*theta_data)[theta_index1],
+                (theta_index1 == 0) ? - (*theta_data)[theta_index1] : 2.0 * PI - (*theta_data)[theta_index1],
+                val_l[i],
+                val_r[i]
+            );
+        }
 
         // construct blast object
         deriveBlast(theta, phi, theta_v, val, blast);
     }
     else {
-        Array1D val_l, val_r;
         // solve val_l
         {
             // compute mu
@@ -214,16 +237,39 @@ double EATS::solveEATS(double Tobs_z, double theta, double phi, double theta_v) 
     int theta_index2;
     findThetaIndex(theta, theta_index1, theta_index2);
 
-    Array1D val;
+    Array1D val, val_l, val_r;
     if (theta_index1 == theta_index2) { // near poles
-        // compute mu
-        double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi) * std::sin(theta_v);
+        // solve val_l
+        {
+            // compute mu within the cell (east hemisphere)
+            double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi) * std::sin(theta_v);
 
-        // solve primitive
-        val = solvePrimitive(mu, Tobs_z, theta_index1);
+            // solve primitive
+            val_l = solvePrimitive(mu, Tobs_z, theta_index1);
+        }
+
+        // solve val_r
+        {
+            // compute mu (negative phi, west hemisphere)
+            double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi + PI) * std::sin(theta_v);
+
+            // solve primitive
+            val_r = solvePrimitive(mu, Tobs_z, theta_index2);
+        }
+        
+        // interpolate val over theta
+        val = Array(6);
+        for (int i = 0; i < 6; ++i) {
+            val[i] = tool->linear(
+                theta,
+                (*theta_data)[theta_index1],
+                (theta_index1 == 0) ? - (*theta_data)[theta_index1] : 2.0 * PI - (*theta_data)[theta_index1],
+                val_l[i],
+                val_r[i]
+            );
+        }
     }
     else {
-        Array1D val_l, val_r;
         // solve val_l
         {
             // compute mu
