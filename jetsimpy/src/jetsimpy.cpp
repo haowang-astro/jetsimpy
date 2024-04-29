@@ -161,6 +161,16 @@ double Jet::calculateAvgModel(double Tobs, double nu, double rtol) {
     return afterglow.integrateModel(Tobs, nu, rtol);
 }
 
+double Jet::WeightedAverage(double Tobs, double nu, double rtol) {
+    // save time
+    if (Tobs == 0.0) return 0.0;
+
+    double luminosity = calculateLuminosity(Tobs, nu, rtol);
+    double integral = calculateAvgModel(Tobs, nu, rtol);
+
+    return integral / luminosity;
+}
+
 double Jet::IntensityOfPixel(const double Tobs, const double nu, const double x_tilde, const double y_tilde) {
     return afterglow.IntensityOfPixel(Tobs, nu, x_tilde, y_tilde);
 }

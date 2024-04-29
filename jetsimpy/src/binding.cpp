@@ -44,7 +44,8 @@ PYBIND11_MODULE(jetsimpy_extension, m) {
         .def("calculateEATS", py::vectorize(&Jet::calculateEATS))
         .def("calculateIntensity", py::vectorize(&Jet::calculateIntensity))
         .def("calculateLuminosity", py::vectorize(&Jet::calculateLuminosity))
-        .def("calculateAvgModel", py::vectorize(&Jet::calculateAvgModel))
+        .def("WeightedAverage", py::vectorize(&Jet::WeightedAverage))
+        //.def("calculateAvgModel", py::vectorize(&Jet::calculateAvgModel))
         .def("IntensityOfPixel", py::vectorize(&Jet::IntensityOfPixel))
     ;
 

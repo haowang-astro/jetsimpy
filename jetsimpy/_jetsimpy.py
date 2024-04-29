@@ -170,95 +170,58 @@ class Jet:
         
         return L * (1 + para["z"]) / 4 / np.pi / (para["d"] * _MPC) ** 2 / _mJy
     
-    # apparent superluminal motion [mas]
-    def Offset(self, t: NDArray, nu: NDArray, para: Dict[str, float], model="sync", rtol=1e-3) -> NDArray:
+    def WeightedAverage(self, t: NDArray, nu: NDArray, para: Dict[str, float], emissitivy_model="sync", average_model="offset", rtol=1e-3):
         # config parameters
         self._jet.configParameters(para)
 
         # config emissivity model
-        self._jet.configEmissivity(model)
+        self._jet.configEmissivity(emissitivy_model)
 
-        # config offset model
-        self._jet.configAvgModel("offset")
+        # config average model
+        self._jet.configAvgModel(average_model)
 
         # calculate weighted average
         try:
-            integral = self._jet.calculateAvgModel(t, nu, rtol)
-            luminosity = self._jet.calculateLuminosity(t, nu, rtol)
+            weighted_average = self._jet.WeightedAverage(t, nu, rtol)
         except Exception as e:
             raise e
-        weighted = integral / luminosity
         
-        return weighted / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
+        return weighted_average
+
+    # apparent superluminal motion [mas]
+    def Offset(self, t: NDArray, nu: NDArray, para: Dict[str, float], model="sync", rtol=1e-3) -> NDArray:
+        offset_cgs = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="offset", rtol=rtol)
+
+        return offset_cgs / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
     
     # size along the jet axis [mas]
     def SizeX(self, t: NDArray, nu: NDArray, para: Dict[str, float], model="sync", rtol=1e-3) -> NDArray:
-        # config parameters
-        self._jet.configParameters(para)
-
-        # config emissivity model
-        self._jet.configEmissivity(model)
-
-        # ---------- calculate offset ---------- #
-
-        # config offset model
-        self._jet.configAvgModel("offset")
-
-        # calculate weighted average
-        try:
-            integral_offset = self._jet.calculateAvgModel(t, nu, rtol)
-            luminosity = self._jet.calculateLuminosity(t, nu, rtol)
-        except Exception as e:
-            raise e
-        xc = integral_offset / luminosity
-
-        # ---------- calculate xscale ---------- #
-
-        # config x scale model
-        self._jet.configAvgModel("sigma_x")
-
-        # calculate weighted average
-        try:
-            integral_x_sq = self._jet.calculateAvgModel(t, nu, rtol)
-            luminosity = self._jet.calculateLuminosity(t, nu, rtol)
-        except Exception as e:
-            raise e
-        x_sq = integral_x_sq / luminosity
-
         # calculate xscale. The following notes are for myself in case I forget what is going on.
-        # This makes sense because of the following reason:
         # First, ∫x dL = xc * ∫dL based on xc defination.
-        # Therefore, 
-        # sigma^2_x = ∫(x - xc)^2 dL / ∫dL 
+        # Then, 
+        # sigma_x^2 = ∫(x - xc)^2 dL / ∫dL 
         #           = ∫(x^2 - 2*x*xc + xc^2)dL / ∫dL 
         #           = (∫x^2 dL - 2*xc*∫x dL + xc^2*∫dL) / ∫dL
         #           = (∫x^2 dL - 2*xc^2*∫dL + xc^2*∫dL) / ∫dL
         #           = (∫x^2 dL / ∫dL) - xc^2
+        # So, I only need to calculate the weighted avergae of x^2, not the original expression.
+
+        # calculate offset
+        xc = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="offset", rtol=rtol)
+
+        # calculate x_sq
+        x_sq = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="sigma_x", rtol=rtol)
+
+        # xscale
         sigma_x = np.sqrt(x_sq - xc * xc)
-        
+
         return sigma_x / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
     
     # size perpendicular to the jet axis [mas]
     def SizeY(self, t: NDArray, nu: NDArray, para: Dict[str, float], model="sync", rtol=1e-3) -> NDArray:
-        # config parameters
-        self._jet.configParameters(para)
+        sigma_y_sq = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="sigma_y", rtol=rtol)
+        sigma_y = np.sqrt(sigma_y_sq)
 
-        # config emissivity model
-        self._jet.configEmissivity(model)
-
-        # config y scale model
-        self._jet.configAvgModel("sigma_y")
-
-        # calculate weighted average
-        try:
-            integral_y_sq = self._jet.calculateAvgModel(t, nu, rtol)
-            luminosity = self._jet.calculateLuminosity(t, nu, rtol)
-        except Exception as e:
-            raise e
-        
-        # calculate y scale
-        sigma_y = np.sqrt(integral_y_sq / luminosity)
-        
         return sigma_y / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
 
     # [cgs] specific intensity at LOS frame coordinate (x_tilde, y_tilde). This method is intended for sky map.
@@ -269,4 +232,10 @@ class Jet:
         # config emissivity model
         self._jet.configEmissivity(model)
 
-        return self._jet.IntensityOfPixel(t, nu, x_tilde, y_tilde)
+        # intensity
+        try:
+            intensity = self._jet.IntensityOfPixel(t, nu, x_tilde, y_tilde)
+        except Exception as e:
+            raise e
+        
+        return intensity
