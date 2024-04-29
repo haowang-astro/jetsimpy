@@ -143,7 +143,10 @@ void EATS::deriveBlast(double theta, double phi, double theta_v, const Array1D& 
     double mu_beta = (nr * sin(theta) * cos(phi) + nth * cos(theta) * cos(phi)) * sin(theta_v)
                    + (nr * cos(theta) - nth * sin(theta)) * cos(theta_v);
     double mu_r = std::cos(theta) * std::cos(theta_v) + std::sin(theta) * std::cos(phi) * std::sin(theta_v);
-    blast.doppler = 1.0 / blast.gamma / (1.0 - blast.beta * mu_beta);
+    blast.doppler = (blast.gamma > 1e3) ? 
+                    1.0 / blast.gamma / (1.0 - mu_beta + 0.5 / blast.gamma / blast.gamma * mu_beta)
+                  : 1.0 / blast.gamma / (1.0 - blast.beta * mu_beta);
+    //blast.doppler = 1.0 / blast.gamma / (1.0 - blast.beta * mu_beta);
     blast.cos_theta_beta = (mu_beta - blast.beta) / (1.0 - blast.beta * mu_beta);
 
     // thermaldynamic properties (comoving frame)
