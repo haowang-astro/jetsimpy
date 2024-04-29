@@ -41,6 +41,7 @@ private:
     Tool tool;                       // the tool containing many functions
     SimBox sim_box;                  // the simulation box
     Interpolator interpolator;       // the interpolation tool
+    EATS eats;                       // equal arrival time surface solver
     Afterglow afterglow;             // afterglow algorithms
 };
 

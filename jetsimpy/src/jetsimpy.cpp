@@ -16,8 +16,11 @@ void Jet::solveJet() {
     // feed data to interpolator
     interpolator.feedData(sim_box, tool);
 
+    // feed data to eats solver
+    eats.feedData(sim_box, tool);
+
     // initialize afterglow object
-    afterglow.initialize(sim_box, tool);
+    afterglow.initialize(sim_box, eats);
 }
 
 py::array_t<double> Jet::getY() {

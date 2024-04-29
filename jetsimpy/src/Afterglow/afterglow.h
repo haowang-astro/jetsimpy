@@ -14,7 +14,7 @@
 class Afterglow {
 public:
     Afterglow() {}
-    void initialize(SimBox& sim_box, Tool& tool);          // initialize object
+    void initialize(SimBox& sim_box, EATS& eats);          // initialize object
     void configParameters(const Dict& param);              // configurate parameter dictionary
     void configEmissivity(const std::string& model_name);  // configure emissivity model
     void configAvgModel(const std::string& model_name);    // configure average models
@@ -49,7 +49,7 @@ private:
     double d;                       // luminosity distance
 
     // equal arrival time surface solver
-    EATS eats;
+    EATS* eats;
 
     // calculate dL/dOmega
     double dL_dOmega(const double Tobs_z, const double nu_z, const double theta, const double phi);

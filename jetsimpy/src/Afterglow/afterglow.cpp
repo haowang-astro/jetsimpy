@@ -1,7 +1,8 @@
 #include "afterglow.h"
 
-void Afterglow::initialize(SimBox& sim_box, Tool& tool) {
-    eats.feedData(sim_box, tool);
+void Afterglow::initialize(SimBox& sim_box, EATS& eats) {
+    this->eats = &eats;
+    //eats.feedData(sim_box, tool);
     theta_data = &(sim_box.getTheta());
     models.registerEmissivity();
     models.registerAvgModels();
@@ -38,7 +39,7 @@ double Afterglow::Intensity(const double Tobs, const double nu, const double the
     double nu_z = nu * (1 + z);
     
     // solve equal-arrival-time-surface and get blast properties
-    eats.solveBlast(Tobs_z, theta, phi, theta_v, blast);
+    eats->solveBlast(Tobs_z, theta, phi, theta_v, blast);
     
     // nu in comoving frame
     double nu_src = nu_z / blast.doppler;
@@ -85,13 +86,13 @@ double Afterglow::Luminosity(const double Tobs, const double nu, const double rt
         phi = (phi < 0.0) ? phi + PI * 2.0 : phi;
 
         // solve equal-arrival-time-surface and get blast properties
-        eats.solveBlast(Tobs_z, theta, phi, theta_v, blast);
+        eats->solveBlast(Tobs_z, theta, phi, theta_v, blast);
 
         return dL_dOmega(Tobs_z, nu_z, theta, phi);
     };
 
     // beaming angle
-    eats.solveBlast(Tobs_z, theta_peak, 0.0, theta_v, blast);
+    eats->solveBlast(Tobs_z, theta_peak, 0.0, theta_v, blast);
     double beaming_angle = 1.0 / blast.gamma;
 
     // initial inegral samples
@@ -130,13 +131,13 @@ double Afterglow::integrateModel(const double Tobs, const double nu, const doubl
         phi = (phi < 0.0) ? phi + PI * 2.0 : phi;
 
         // solve equal-arrival-time-surface and get blast properties
-        eats.solveBlast(Tobs_z, theta, phi, theta_v, blast);
+        eats->solveBlast(Tobs_z, theta, phi, theta_v, blast);
 
         return (*avg_model)(nu_src, param, blast) * dL_dOmega(Tobs_z, nu_z, theta, phi);
     };
 
     // beaming angle
-    eats.solveBlast(Tobs_z, theta_peak, 0.0, theta_v, blast);
+    eats->solveBlast(Tobs_z, theta_peak, 0.0, theta_v, blast);
     double beaming_angle = 1.0 / blast.gamma;
 
     // initial inegral samples (phi from 0 to 2 * pi)
@@ -196,7 +197,7 @@ double Afterglow::IntensityOfPixel(const double Tobs, const double nu, const dou
         phi = (phi < 0.0) ? phi + PI * 2.0 : phi;
 
         // solve EATS
-        eats.solveBlast(Tobs / (1 + this->z), theta, phi, theta_v, blast);
+        eats->solveBlast(Tobs / (1 + this->z), theta, phi, theta_v, blast);
 
         // why do I use arcsinh? I don't even remember!
         return projection - blast.R * std::sin(theta_tilde);
