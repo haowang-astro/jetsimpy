@@ -16,7 +16,7 @@ public:
     Array1D& getTheta();         // get cell centers
 private:
     // tools
-    Tool& tool;                  // useful functions
+    Tool* tool;                  // useful functions
 
     // configuration
     double tmin;                 // minimum pde time

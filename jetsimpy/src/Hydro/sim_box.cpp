@@ -1,10 +1,9 @@
 #include "sim_box.h"
 
 // ---------- public functions ---------- //
-SimBox::SimBox(const JetConfig& jet_config, Tool& tool)
-  : tool (tool)
-{
-    // cfl number
+SimBox::SimBox(const JetConfig& jet_config, Tool& tool) {
+    // member setup
+    this->tool = &tool;
     cfl = jet_config.cfl;
     tmin = jet_config.tmin;
     tmax = jet_config.tmax;
@@ -83,7 +82,7 @@ void SimBox::solvePrimitive() {
     for (int i = 0; i < ntheta; ++i) {
         // velocity
         try {
-            beta_gamma_sq[i] = tool.solveBetaGammaSq(Msw[i] / Eb[i], Mej[i] / Eb[i], R[i]);
+            beta_gamma_sq[i] = tool->solveBetaGammaSq(Msw[i] / Eb[i], Mej[i] / Eb[i], R[i]);
         }
         catch (const std::exception& e) {
             std::string text = "Hydro Primitive solver: ";
@@ -91,7 +90,7 @@ void SimBox::solvePrimitive() {
         }
 
         // convenient variables
-        s[i] = tool.solveS(R[i], beta_gamma_sq[i]);
+        s[i] = tool->solveS(R[i], beta_gamma_sq[i]);
         gamma[i] = std::sqrt(beta_gamma_sq[i] + 1.0);
         beta[i] = std::sqrt(beta_gamma_sq[i] / (beta_gamma_sq[i] + 1.0));
         Psw[i] = s[i] * beta[i] * beta[i] * Msw[i] / 3.0;
@@ -143,7 +142,7 @@ void SimBox::solveSlope() {
             diff2 = var[index2] - var[i];          // difference to right cell
             slope1 = (i == index1) ? 0.0 : diff1 / (theta[i] - theta[index1]);  // left biased slope
             slope2 = (i == index2) ? 0.0 : diff2 / (theta[index2] - theta[i]);  // right biased slope
-            slope[j][i] = tool.minmod(slope1, slope2);  // slope limiter
+            slope[j][i] = tool->minmod(slope1, slope2);  // slope limiter
         }
     }
 
@@ -200,8 +199,8 @@ void SimBox::solveNumericalFlux() {
         }
         
         // solve calibration coefficients
-        s_l = tool.solveS(R_l, beta_gamma_sq_l);
-        s_r = tool.solveS(R_r, beta_gamma_sq_r);
+        s_l = tool->solveS(R_l, beta_gamma_sq_l);
+        s_r = tool->solveS(R_r, beta_gamma_sq_r);
 
         // solve left-biased conserved variables
         Eb_l = s_l * (1.0 + beta_gamma_sq_l * beta_gamma_sq_l / (beta_gamma_sq_l + 1) / (beta_gamma_sq_l + 1) / 3.0) * (beta_gamma_sq_l + 1) * Msw_l
@@ -284,7 +283,7 @@ void SimBox::solveDyDt() {
         dy_dt[4][i] *= CSpeed;
 
         // conserved variables
-        double rho = tool.solveDensity(R[i]) * MassP;
+        double rho = tool->solveDensity(R[i]) * MassP;
         dy_dt[0][i] = (numerical_flux[0][i] - numerical_flux[0][i + 1]) / vol
                     + dy_dt[4][i] * rho * R[i] * R[i];
         dy_dt[1][i] = (numerical_flux[1][i] - numerical_flux[1][i + 1]) / vol
@@ -305,7 +304,7 @@ void SimBox::solveDyDt_no_spread() {
         dy_dt[4][i] = beta_f * CSpeed;
 
         // conserved variables
-        double rho = tool.solveDensity(R[i]) * MassP;
+        double rho = tool->solveDensity(R[i]) * MassP;
         dy_dt[0][i] = dy_dt[4][i] * rho * R[i] * R[i];
         dy_dt[1][i] = 0.0;
         dy_dt[2][i] = dy_dt[4][i] * rho * R[i] * R[i];
