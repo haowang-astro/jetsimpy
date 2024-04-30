@@ -13,11 +13,11 @@ _MAS = 1.0 / 206264806.24709466
 class Jet:
     def __init__(             # It is the user's responsibility to make sure input values are valid.
         self,
-        theta: NDArray,       # [tabulated data]: polar angles
-        energy: NDArray,      # [tabulated data]: Eiso (erg) (rest mass excluded)
-        lf: NDArray,          # [tabulated data]: Lorentz factor
-        nwind: float,         # [wind density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
-        nism: float,          # [ism density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
+        theta,                # [tabulated data]: polar angles
+        energy,               # [tabulated data]: Eiso (erg) (rest mass excluded)
+        lf,                   # [tabulated data]: Lorentz factor
+        nwind,                # [wind density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
+        nism,                 # [ism density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
         tmin=10.0,            # [simulation start time]: (s)
         tmax=3.2e9,           # [simulation end time]: (s)
         grid=Uniform(257),    # [cell edge angles]: start with 0 and end with pi.
@@ -94,54 +94,54 @@ class Jet:
     
     # ---------- PDE original data ---------- #
     @property
-    def t_pde(self) -> NDArray:
+    def t_pde(self):
         result = np.array(self._jet.getT())
         return result
     
     # original y: Msw, Mej, beta_gamma_sq, beta_th, R (shape = [5, ntheta, nt])
     @property
-    def y_pde(self) -> NDArray:
+    def y_pde(self):
         result = np.array(self._jet.getY())
         return result
     
     @property
-    def theta_pde(self) -> NDArray:
+    def theta_pde(self):
         result = np.array(self._jet.getTheta())
         return result
 
     # ---------- PDE data interpolation ---------- #
     # rest mass excluded energy (erg / sr)
-    def dE0_dOmega(self, t: NDArray, theta: NDArray) -> NDArray:
+    def dE0_dOmega(self, t, theta):
         return self._jet.interpolateE0(t, theta)
     
     # swetp-up mass (g / sr)
-    def dMsw_dOmega(self, t: NDArray, theta: NDArray) -> NDArray:
+    def dMsw_dOmega(self, t, theta):
         return self._jet.interpolateMsw(t, theta)
     
     # ejecta mass (g / sr)
-    def dMej_dOmega(self, t: NDArray, theta: NDArray) -> NDArray:
+    def dMej_dOmega(self, t, theta):
         return self._jet.interpolateMej(t, theta)
 
     # four velocity
-    def beta_gamma(self, t: NDArray, theta: NDArray) -> NDArray:
+    def beta_gamma(self, t, theta):
         return self._jet.interpolateBetaGamma(t, theta)
     
     # polar velocity
-    def beta_theta(self, t: NDArray, theta: NDArray) -> NDArray:
+    def beta_theta(self, t, theta):
         return self._jet.interpolateBetaTh(t, theta)
     
     # radius (cm)
-    def R(self, t: NDArray, theta: NDArray) -> NDArray:
+    def R(self, t, theta):
         return self._jet.interpolateR(t, theta)
 
     # ---------- Radiation Related ---------- #
 
     # Simply calculate time t by equal arrival time surface. Just for fun!
-    def EATS(self, t: NDArray, theta: NDArray, phi: NDArray, theta_v: NDArray, z: NDArray):
+    def EATS(self, t, theta, phi, theta_v, z):
         return self._jet.calculateEATS(t, theta, phi, theta_v, z)
 
     # specific intensity at jet sphreical coordinate [cgs] Could be useful for debug
-    def Intensity(self, t: NDArray, nu: NDArray, theta: NDArray, phi: NDArray, para: Dict[str, float], model="sync") -> NDArray:
+    def Intensity(self, t, nu, theta, phi, para, model="sync"):
         # config parameters
         self._jet.configParameters(para)
 
@@ -156,7 +156,7 @@ class Jet:
         return I
     
     # flux density [mJy]
-    def FluxDensity(self, t: NDArray, nu: NDArray, para: Dict[str, float], model="sync", rtol=1e-3) -> NDArray:
+    def FluxDensity(self, t, nu, para, model="sync", rtol=1e-3):
         # config parameters
         self._jet.configParameters(para)
 
@@ -170,7 +170,7 @@ class Jet:
         
         return L * (1 + para["z"]) / 4 / np.pi / (para["d"] * _MPC) ** 2 / _mJy
     
-    def WeightedAverage(self, t: NDArray, nu: NDArray, para: Dict[str, float], emissitivy_model="sync", average_model="offset", rtol=1e-3):
+    def WeightedAverage(self, t, nu, para, emissitivy_model="sync", average_model="offset", rtol=1e-3):
         # config parameters
         self._jet.configParameters(para)
 
@@ -189,13 +189,13 @@ class Jet:
         return weighted_average
 
     # apparent superluminal motion [mas]
-    def Offset(self, t: NDArray, nu: NDArray, para: Dict[str, float], model="sync", rtol=1e-3) -> NDArray:
+    def Offset(self, t, nu, para, model="sync", rtol=1e-3):
         offset_cgs = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="offset", rtol=rtol)
 
         return offset_cgs / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
     
     # size along the jet axis [mas]
-    def SizeX(self, t: NDArray, nu: NDArray, para: Dict[str, float], model="sync", rtol=1e-3) -> NDArray:
+    def SizeX(self, t, nu, para, model="sync", rtol=1e-3):
         # calculate xscale. The following notes are for myself in case I forget what is going on.
         # First, ∫x dL = xc * ∫dL based on xc defination.
         # Then, 
@@ -218,14 +218,14 @@ class Jet:
         return sigma_x / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
     
     # size perpendicular to the jet axis [mas]
-    def SizeY(self, t: NDArray, nu: NDArray, para: Dict[str, float], model="sync", rtol=1e-3) -> NDArray:
+    def SizeY(self, t, nu, para, model="sync", rtol=1e-3):
         sigma_y_sq = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="sigma_y", rtol=rtol)
         sigma_y = np.sqrt(sigma_y_sq)
 
         return sigma_y / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
 
     # [cgs] specific intensity at LOS frame coordinate (x_tilde, y_tilde). This method is intended for sky map.
-    def IntensityOfPixel(self, t: NDArray, nu: NDArray, x_tilde: NDArray, y_tilde: NDArray, para: Dict[str, float], model="sync") -> NDArray:
+    def IntensityOfPixel(self, t, nu, x_tilde, y_tilde, para, model="sync"):
         # config parameters
         self._jet.configParameters(para)
 
