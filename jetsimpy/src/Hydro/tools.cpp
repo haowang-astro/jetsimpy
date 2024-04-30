@@ -4,7 +4,7 @@ Tool::Tool(const JetConfig& jet_config) {
     nwind = jet_config.nwind;
     nism = jet_config.nism;
     rtol = jet_config.rtol;
-    calib_level = jet_config.calib_level;
+    cal_level = jet_config.cal_level;
 }
 
 double Tool::solveDensity(double r) {
@@ -17,13 +17,13 @@ double Tool::solveS(double r, double beta_gamma_sq) {
 
     // calibration coefficient
     double s;
-    if (calib_level == 0) {
+    if (cal_level == 0) {
         s = 1.0;
     }
-    else if (calib_level == 1) {
+    else if (cal_level == 1) {
         s = 0.52935729 - 0.05698377 * k - 0.00158176 * k * k - 0.00939548 * k * k * k;
     }
-    else if (calib_level == 2) {
+    else if (cal_level == 2) {
         double sBM = 0.52935729 - 0.05698377 * k - 0.00158176 * k * k - 0.00939548 * k * k * k;
         double sST = 1.635 - 0.651 * k;
         s = (sST + sBM * factor * beta_gamma_sq) / (1.0 + factor * beta_gamma_sq);

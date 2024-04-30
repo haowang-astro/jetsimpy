@@ -21,7 +21,7 @@ private:
     double nwind;                   // wind density scale
     double nism;                    // ISM density scale
     double rtol;                    // relative tolerance of solving (beta * gamma)
-    int calib_level;                // calibration level.
+    int cal_level;                  // calibration level.
 };
 
 #endif

@@ -23,11 +23,10 @@ class Jet:
         grid=Uniform(257),    # [cell edge angles]: start with 0 and end with pi.
         tail=True,            # [isotropic tail]: add an extremely low energy low velocity isotropic tail for safty
         spread=True,          # [spreading]: spread or not
-        calib_level=1,        # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (dangerous)
+        cal_level=1,          # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (ST is dangerous)
         rtol=1e-6,            # [primitive variable solver tolerance]: Don't change it unless you know what is going on.
         cfl=0.9,              # [cfl number]: Don't change it unless you know what is going on.
     ):
-
         # save
         self.theta_data = theta
         self.energy_data = energy
@@ -41,56 +40,12 @@ class Jet:
         self.grid = grid
         self.tail = tail
         self.spread = spread
-        self.calib_level = calib_level
+        self.cal_level = cal_level
 
         # solve jet
         jet_config = self._configJet()
         self._jet = _extension.Jet(jet_config)
         self._jet.solveJet()
-
-    def _configJet(self):
-        # initialize parameter object
-        jet_config = _extension.JetConfig()
-        jet_config.nwind = self.nwind
-        jet_config.nism = self.nism
-        jet_config.tmin = self.tmin
-        jet_config.tmax = self.tmax
-        jet_config.rtol = self.rtol
-        jet_config.cfl = self.cfl
-        jet_config.spread = self.spread
-        jet_config.calib_level = self.calib_level
-
-        # generate grid
-        theta_edge = self.grid
-        theta = np.array([(theta_edge[i] + theta_edge[i + 1]) / 2 for i in range(len(theta_edge) - 1)])
-        jet_config.theta_edge = theta_edge
-
-        # add isotropic tail
-        if self.tail:
-            self.energy_data[self.energy_data <= np.max(self.energy_data) * 1e-12] = np.max(self.energy_data) * 1e-12
-            self.lf_data[self.lf_data <= 1.005] = 1.005
-
-        # interpolate initial condition to grid points
-        E0 = np.interp(theta, self.theta_data, self.energy_data / 4.0 / np.pi / _C ** 2.0)
-        lf0 = np.interp(theta, self.theta_data, self.lf_data)
-
-        # get mej and initial velocity
-        Mej0 = E0 / (lf0 - 1)
-        beta0 = np.sqrt(1.0 - 1.0 / lf0 ** 2)
-        
-        # analytically expand (coast) the blastwave from t=0 to t=tmin
-        R0 = beta0 * _C * self.tmin
-        Msw0 = self.nwind * _Mass_P * R0 / 1e17 * 1e51 + self.nism * _Mass_P * R0 * R0 * R0 / 3.0
-        Eb0 = E0 + Mej0 + Msw0
-        
-        # config jet initial condition
-        jet_config.Eb = Eb0
-        jet_config.Ht = np.zeros_like(theta)
-        jet_config.Msw = Msw0
-        jet_config.Mej = Mej0
-        jet_config.R = R0
-        
-        return jet_config
     
     # ---------- PDE original data ---------- #
     @property
@@ -239,3 +194,47 @@ class Jet:
             raise e
         
         return intensity
+    
+    def _configJet(self):
+        # initialize parameter object
+        jet_config = _extension.JetConfig()
+        jet_config.nwind = self.nwind
+        jet_config.nism = self.nism
+        jet_config.tmin = self.tmin
+        jet_config.tmax = self.tmax
+        jet_config.rtol = self.rtol
+        jet_config.cfl = self.cfl
+        jet_config.spread = self.spread
+        jet_config.cal_level = self.cal_level
+
+        # generate grid
+        theta_edge = self.grid
+        theta = np.array([(theta_edge[i] + theta_edge[i + 1]) / 2 for i in range(len(theta_edge) - 1)])
+        jet_config.theta_edge = theta_edge
+
+        # add isotropic tail
+        if self.tail:
+            self.energy_data[self.energy_data <= np.max(self.energy_data) * 1e-12] = np.max(self.energy_data) * 1e-12
+            self.lf_data[self.lf_data <= 1.005] = 1.005
+
+        # interpolate initial condition to grid points
+        E0 = np.interp(theta, self.theta_data, self.energy_data / 4.0 / np.pi / _C ** 2.0)
+        lf0 = np.interp(theta, self.theta_data, self.lf_data)
+
+        # get mej and initial velocity
+        Mej0 = E0 / (lf0 - 1)
+        beta0 = np.sqrt(1.0 - 1.0 / lf0 ** 2)
+        
+        # analytically expand (coast) the blastwave from t=0 to t=tmin
+        R0 = beta0 * _C * self.tmin
+        Msw0 = self.nwind * _Mass_P * R0 / 1e17 * 1e51 + self.nism * _Mass_P * R0 * R0 * R0 / 3.0
+        Eb0 = E0 + Mej0 + Msw0
+        
+        # config jet initial condition
+        jet_config.Eb = Eb0
+        jet_config.Ht = np.zeros_like(theta)
+        jet_config.Msw = Msw0
+        jet_config.Mej = Mej0
+        jet_config.R = R0
+        
+        return jet_config

@@ -17,7 +17,7 @@ PYBIND11_MODULE(jetsimpy_extension, m) {
         .def_readwrite("rtol", &JetConfig::rtol)
         .def_readwrite("cfl", &JetConfig::cfl)
         .def_readwrite("spread", &JetConfig::spread)
-        .def_readwrite("calib_level", &JetConfig::calib_level)
+        .def_readwrite("cal_level", &JetConfig::cal_level)
     ;
 
     // jet & afterglow calculation class

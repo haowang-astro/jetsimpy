@@ -21,7 +21,7 @@ struct JetConfig {
     double rtol;                    // velocity solver tolerance
     double cfl;                     // Courant number
     bool spread;                    // Whether enabling spreading
-    int calib_level;                // calibration level: 
+    int cal_level;                  // calibration level: 
                                     //   0: no calibration. 
                                     //   1: calibrate with Blandford-McKee all time.
                                     //   2: calibrate with Blandford-McKee in ultra-relativistic phase and Sedov-Taylor in Newtonian phase.

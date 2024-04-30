@@ -42,7 +42,7 @@ jet2 = jetsimpy.Jet(
     grid=jetsimpy.NorthPole(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
     tail=True,                     # [isotropic tail]: add an extremely low energy low velocity isotropic tail for safty
     spread=True,                   # w/wo spreading effect 
-    calib_level=1,                 # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (dangerous)
+    cal_level=1,                 # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (dangerous)
     rtol=1e-6,                     # [primitive variable solver tolerance]: Don't change it unless you know what is going on.
     cfl=0.9,                       # [cfl number]: Don't change it unless you know what is going on.
 )
