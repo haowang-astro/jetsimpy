@@ -66,7 +66,7 @@ nu = 1e15
 
 # hydro simulation
 jet = jetsimpy.Jet(
-    *jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
+    jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
     0.0,               # wind number density scale
     P["n0"],           # ism number density scale
 )
