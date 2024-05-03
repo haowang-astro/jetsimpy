@@ -24,7 +24,7 @@ P = dict(
 
 # solve jet
 jet = jetsimpy.Jet(
-    *jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
+    jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
     P["A"],          # scale of wind density
     P["n0"],         # constant number density
 )

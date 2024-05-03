@@ -23,7 +23,7 @@ P = dict(
 
 # jet without spreading
 jet1 = jetsimpy.Jet(
-    *jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
+    jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
     P["A"],          # scale of wind density
     P["n0"],         # constant number density
     spread=False,    # w/wo spreading effect 
@@ -31,7 +31,7 @@ jet1 = jetsimpy.Jet(
 
 # jet with spreading
 jet2 = jetsimpy.Jet(
-    *jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
+    jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
     P["A"],          # scale of wind density
     P["n0"],         # constant number density
     spread=True,     # w/wo spreading effect

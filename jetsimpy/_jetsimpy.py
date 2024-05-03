@@ -13,9 +13,7 @@ _MAS = 1.0 / 206264806.24709466
 class Jet:
     def __init__(             # It is the user's responsibility to make sure input values are valid.
         self,
-        theta,                # [tabulated data]: polar angles
-        energy,               # [tabulated data]: Eiso (erg) (rest mass excluded)
-        lf,                   # [tabulated data]: Lorentz factor
+        profiles,             # [tuple of tabulated data]: (angles, Eiso, Lorentz factor)
         nwind,                # [wind density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
         nism,                 # [ism density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
         tmin=10.0,            # [simulation start time]: (s)
@@ -28,6 +26,7 @@ class Jet:
         cfl=0.9,              # [cfl number]: Don't change it unless you know what is going on.
     ):
         # save
+        theta, energy, lf = profiles
         self.theta_data = theta
         self.energy_data = energy
         self.lf_data = lf
