@@ -2,12 +2,12 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'jetsimpy'
+copyright = '2024, Hao Wang'
+author = 'Hao Wang'
 
-release = '0.1'
-version = '0.1.0'
+release = '0.4.0'
+version = '0.4.0'
 
 # -- General configuration
 
