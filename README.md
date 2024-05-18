@@ -3,7 +3,7 @@ Hydrodynamic simulations of relativistic blastwave with tabulated angular energy
 
 Code paper: [Wang et al. 2024](https://arxiv.org/abs/2402.19359).
 
-## Important changes (5. 3. 2024)
+## Important changes (May 3. 2024)
 A small change of the interface. Now the interface should be stable (I hope)! A documentation is under development.
 
 ## Features
