@@ -12,7 +12,7 @@ void Models::registerEmissivity() {
     //     ...
     //
     //     return emissivity;            // return value must be a "double"
-    // }
+    // };
 
     // ---------- default radiation model (Sari 1998) ---------- //
     emissivity_models["sync"] = [](const double nu, const Dict& P, const Blast& blast) {
