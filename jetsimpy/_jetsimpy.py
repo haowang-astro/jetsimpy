@@ -23,7 +23,7 @@ class Jet:
         spread=True,          # [spreading]: spread or not
         cal_level=1,          # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (ST is dangerous)
         rtol=1e-6,            # [primitive variable solver tolerance]: Don't change it unless you know what is going on.
-        cfl=0.8,              # [cfl number]: Don't change it unless you know what is going on.
+        cfl=0.9,              # [cfl number]: Don't change it unless you know what is going on.
     ):
         # save
         theta, energy, lf = profiles
