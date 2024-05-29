@@ -3,8 +3,8 @@ Hydrodynamic simulations of relativistic blastwave with tabulated angular energy
 
 Code paper: [Wang et al. 2024](https://arxiv.org/abs/2402.19359).
 
-## Important changes (May 3. 2024)
-A small change of the interface. Now the interface should be stable (I hope)! A documentation is under development.
+## Known issues
+Sometimes the code fails with an error information "`f(a) and f(b) must have different signs!`" or "`Solver doesn't converge after 100 iterations!`". This means the hydro simulation runs into numerical instability. For now, a temporary solution is to reduce the `cfl` keyword (e.g., 0.5 or smaller). This will slow down the code by a corresponding ratio but make it more stable. This issue will be fixed in the next update.
 
 ## Features
 
