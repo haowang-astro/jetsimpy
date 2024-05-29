@@ -97,7 +97,7 @@ double brentq(F& f, double xa, double xb, double xtol, double rtol = 1e-8, int i
     }
 
     // the solver does not converge after xxx iterations!
-    string text = "Solver doesn't converge after " + to_string(iter) + " interations!\n";
+    string text = "Solver doesn't converge after " + to_string(iter) + " iterations!\n";
     throw std::runtime_error(text);
 
     return xcur;
