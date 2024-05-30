@@ -154,7 +154,8 @@ void SimBox::solveSlope() {
         diff2 = R[index2] - R[i];          // difference to right cell
         R_slope_l[i] = (i == index1) ? 0.0 : diff1 / (theta[i] - theta[index1]);  // left biased slope
         R_slope_r[i] = (i == index2) ? 0.0 : diff2 / (theta[index2] - theta[i]);  // right biased slope
-        slope[4][i] = (R_slope_l[i] + R_slope_r[i]) / 2.0;  // total slope
+        //slope[4][i] = (R_slope_l[i] + R_slope_r[i]) / 2.0;  // total slope
+        slope[4][i] = tool->minmod(R_slope_l[i], R_slope_r[i]);
     }
 }
 
