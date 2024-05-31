@@ -47,4 +47,18 @@ inline Array3D Array(int n1, int n2, int n3, double fill = 0.0) {
     return std::vector<std::vector<std::vector<double>>>(n1, array2d);
 }
 
+// print function
+template <typename T>
+void print(T var1) {
+    std::cout << var1 << "\n";
+}
+
+template <typename T, typename... Types>
+void print(T var1, Types... var2) {
+    std::cout << var1 << " ";
+    print(var2...);
+}
+
+
+
 #endif
