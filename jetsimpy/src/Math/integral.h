@@ -31,7 +31,8 @@ double Adaptive_1D(F& f, const Array1D xini, const double xtol, const double rto
     Interval new_itv;
     std::vector<Interval> intervals = {new_itv};
     double integral_tot = 0.0;
-    for (int i = 0; i < xini.size() - 1; ++i) {
+    int xsize = xini.size();
+    for (int i = 0; i < xsize - 1; ++i) {
         // assign values to a new interval
         new_itv.x1 = xini[i];
         new_itv.h = xini[i + 1] - xini[i];
