@@ -47,4 +47,11 @@ Sky map
 -------
 .. py:method:: .IntensityOfPixel(t, nu, x_offset, y_offset, P, model="sync")
     
-    The intensity of a "pixel" which is offset from the burst center by (x_offset, y_offset).
+    The intensity of a "pixel" in the image.
+
+    :param float t: time series (s)
+    :param float nu: frequency series (Hz)
+    :param np.array x_offset: offset of the pixel along jet axis direction (MAS).
+    :param np.array y_offset: offset of the pixel perpendicular to the jet axis direction (MAS).
+    :param dict P: parameter dictionary
+    :param str model: emissivity model
