@@ -154,7 +154,7 @@ double Afterglow::findPeak(const double Tobs_z, const double nu_z) {
     auto f = [&](const double& theta) {
         // solve equal-arrival-time-surface and get blast properties
         eats->solveBlast(Tobs_z, theta, 0.0, theta_v, blast);
-        
+
         return - dL_dOmega(Tobs_z, nu_z, theta, 0.0);
     };
 
@@ -163,7 +163,7 @@ double Afterglow::findPeak(const double Tobs_z, const double nu_z) {
     return theta_peak;
 }
 
-double Afterglow::IntensityOfPixel(const double Tobs, const double nu, const double x_tilde, const double y_tilde) {
+double Afterglow::IntensityOfPixel(const double Tobs, const double nu, const double x_offset, const double y_offset) {
     // function to solve intensity from LOS spherical coordinate
     auto f_intensity = [&](const double theta_tilde, const double phi_tilde) {
         // convert to source coordinate (cartisan)
@@ -181,10 +181,10 @@ double Afterglow::IntensityOfPixel(const double Tobs, const double nu, const dou
     };
 
     // projection to the axis of LOS coordinate
-    double projection = std::sqrt(x_tilde * x_tilde + y_tilde * y_tilde) * d * MPC * (1.0 + z) * (1.0 + z) * MAS;
+    double projection = std::sqrt(x_offset * x_offset + y_offset * y_offset) * d * MPC * (1.0 + z) * (1.0 + z) * MAS;
 
     // solve azimuthal angle
-    double phi_tilde = std::atan2(y_tilde, x_tilde);
+    double phi_tilde = std::atan2(y_offset, x_offset);
     phi_tilde = (phi_tilde < 0.0) ? phi_tilde + PI * 2.0 : phi_tilde;
 
     // function to solve root and optimize

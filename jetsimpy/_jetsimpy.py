@@ -179,7 +179,7 @@ class Jet:
         return sigma_y / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
 
     # [cgs] specific intensity at LOS frame coordinate (x_tilde, y_tilde). This method is intended for sky map.
-    def IntensityOfPixel(self, t, nu, x_tilde, y_tilde, para, model="sync"):
+    def IntensityOfPixel(self, t, nu, x_offset, y_offset, para, model="sync"):
         # config parameters
         self._jet.configParameters(para)
 
@@ -188,7 +188,7 @@ class Jet:
 
         # intensity
         try:
-            intensity = self._jet.IntensityOfPixel(t, nu, x_tilde, y_tilde)
+            intensity = self._jet.IntensityOfPixel(t, nu, x_offset, y_offset)
         except Exception as e:
             raise e
         

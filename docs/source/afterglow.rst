@@ -45,6 +45,6 @@ Image size
 
 Sky map
 -------
-.. py:method:: .IntensityOfPixel(t, nu, x_tilde, y_tilde, P, model="sync")
+.. py:method:: .IntensityOfPixel(t, nu, x_offset, y_offset, P, model="sync")
     
-    The intensity of a "pixel" which is offset from the burst center by (x_tilde, y_tilde).
+    The intensity of a "pixel" which is offset from the burst center by (x_offset, y_offset).
