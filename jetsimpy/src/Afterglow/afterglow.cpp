@@ -152,6 +152,9 @@ double Afterglow::integrateModel(const double Tobs, const double nu, const doubl
 double Afterglow::findPeak(const double Tobs_z, const double nu_z) {
     // define function
     auto f = [&](const double& theta) {
+        // solve equal-arrival-time-surface and get blast properties
+        eats->solveBlast(Tobs_z, theta, 0.0, theta_v, blast);
+        
         return - dL_dOmega(Tobs_z, nu_z, theta, 0.0);
     };
 
