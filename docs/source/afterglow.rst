@@ -21,7 +21,7 @@ The parameter dictionary `P` must be compatible with the emissivity model (to be
 
 Apparent superluminal motion
 ----------------------------
-The flux centroid offset can calculated by following method
+The flux centroid offset can calculated by the following method
 
 .. py:method:: .Offset(t, nu, P, model='sync', rtol=1e-3)
 
