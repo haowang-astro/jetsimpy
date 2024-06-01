@@ -3,8 +3,8 @@ Hydrodynamic simulations of relativistic blastwave with tabulated angular energy
 
 Code paper: [Wang et al. 2024](https://arxiv.org/abs/2402.19359).
 
-## Known issues
-Fixed!
+## Documentation
+A brief documentation is now available at: [https://jetsimpy.readthedocs.io/](https://jetsimpy.readthedocs.io/).
 
 ## Features
 

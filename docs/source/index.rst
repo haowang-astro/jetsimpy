@@ -11,6 +11,6 @@ jetsimpy
 
 Installation
 ============
-The code is not published to PyPI, so please install it from source::
+The code is not published to PyPI yet, so please install it from source::
 
 $ pip install . && python setup.py clean
