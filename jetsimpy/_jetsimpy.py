@@ -95,9 +95,9 @@ class Jet:
         return self._jet.calculateEATS(t, theta, phi, theta_v, z)
 
     # specific intensity at jet sphreical coordinate [cgs] Could be useful for debug
-    def Intensity(self, t, nu, theta, phi, para, model="sync"):
+    def Intensity(self, t, nu, theta, phi, P, model="sync"):
         # config parameters
-        self._jet.configParameters(para)
+        self._jet.configParameters(P)
 
         # config emissivity model
         self._jet.configEmissivity(model)
@@ -110,9 +110,9 @@ class Jet:
         return I
     
     # flux density [mJy]
-    def FluxDensity(self, t, nu, para, model="sync", rtol=1e-3):
+    def FluxDensity(self, t, nu, P, model="sync", rtol=1e-3):
         # config parameters
-        self._jet.configParameters(para)
+        self._jet.configParameters(P)
 
         # config emissivity model
         self._jet.configEmissivity(model)
@@ -122,11 +122,11 @@ class Jet:
         except Exception as e:
             raise e
         
-        return L * (1 + para["z"]) / 4 / np.pi / (para["d"] * _MPC) ** 2 / _mJy
+        return L * (1 + P["z"]) / 4 / np.pi / (P["d"] * _MPC) ** 2 / _mJy
     
-    def WeightedAverage(self, t, nu, para, emissitivy_model="sync", average_model="offset", rtol=1e-3):
+    def WeightedAverage(self, t, nu, P, emissitivy_model="sync", average_model="offset", rtol=1e-3):
         # config parameters
-        self._jet.configParameters(para)
+        self._jet.configParameters(P)
 
         # config emissivity model
         self._jet.configEmissivity(emissitivy_model)
@@ -143,13 +143,13 @@ class Jet:
         return weighted_average
 
     # apparent superluminal motion [mas]
-    def Offset(self, t, nu, para, model="sync", rtol=1e-3):
-        offset_cgs = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="offset", rtol=rtol)
+    def Offset(self, t, nu, P, model="sync", rtol=1e-3):
+        offset_cgs = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="offset", rtol=rtol)
 
-        return offset_cgs / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
+        return offset_cgs / P["d"] / _MPC / (1.0 + P["z"]) / (1.0 + P["z"]) / _MAS
     
     # size along the jet axis [mas]
-    def SizeX(self, t, nu, para, model="sync", rtol=1e-3):
+    def SizeX(self, t, nu, P, model="sync", rtol=1e-3):
         # calculate xscale. The following notes are for myself in case I forget what is going on.
         # First, ∫x dL = xc * ∫dL based on xc defination.
         # Then, 
@@ -161,27 +161,27 @@ class Jet:
         # So, I only need to calculate the weighted avergae of x^2, not the original expression.
 
         # calculate offset
-        xc = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="offset", rtol=rtol)
+        xc = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="offset", rtol=rtol)
 
         # calculate x_sq
-        x_sq = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="sigma_x", rtol=rtol)
+        x_sq = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="sigma_x", rtol=rtol)
 
         # xscale
         sigma_x = np.sqrt(x_sq - xc * xc)
 
-        return sigma_x / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
+        return sigma_x / P["d"] / _MPC / (1.0 + P["z"]) / (1.0 + P["z"]) / _MAS
     
     # size perpendicular to the jet axis [mas]
-    def SizeY(self, t, nu, para, model="sync", rtol=1e-3):
-        sigma_y_sq = self.WeightedAverage(t, nu, para, emissitivy_model=model, average_model="sigma_y", rtol=rtol)
+    def SizeY(self, t, nu, P, model="sync", rtol=1e-3):
+        sigma_y_sq = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="sigma_y", rtol=rtol)
         sigma_y = np.sqrt(sigma_y_sq)
 
-        return sigma_y / para["d"] / _MPC / (1.0 + para["z"]) / (1.0 + para["z"]) / _MAS
+        return sigma_y / P["d"] / _MPC / (1.0 + P["z"]) / (1.0 + P["z"]) / _MAS
 
     # [cgs] specific intensity at LOS frame coordinate (x_tilde, y_tilde). This method is intended for sky map.
-    def IntensityOfPixel(self, t, nu, x_offset, y_offset, para, model="sync"):
+    def IntensityOfPixel(self, t, nu, x_offset, y_offset, P, model="sync"):
         # config parameters
-        self._jet.configParameters(para)
+        self._jet.configParameters(P)
 
         # config emissivity model
         self._jet.configEmissivity(model)
