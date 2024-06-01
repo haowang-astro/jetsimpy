@@ -75,9 +75,9 @@ The external density is assumed to follow the profile below.
 
 start and end time
 ------------------
-The start time `tmin` is non-zero because the initial radius must be positive. The code will expand the blastwave at the initial speed until `tmin`, and then start the simulation. In principle `tmin` can be arbitrarily small. However, to speed up the simulation, a moderate value is preferred. `tmin=10` is in general a safe value.
+The start time `tmin` is non-zero because the initial radius must be positive. The blastwave will coast at the initial speed until `tmin`, and then the simulation starts. Physically `tmin` can be set to a value around the photospherical radius (timescale). A moderate value such as `tmin=10` is preferred.
 
-The simulation ends at `tmax`. This value should be sufficiently large to cover the time span of afterglow modeling.
+The simulation ends at `tmax`. This value should be sufficiently large to cover the time period of afterglow modeling.
 
 resolution
 ----------
