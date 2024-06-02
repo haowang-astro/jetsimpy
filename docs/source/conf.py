@@ -6,8 +6,8 @@ project = 'jetsimpy'
 copyright = '2024, Hao Wang'
 author = 'Hao Wang'
 
-release = '0.4.0'
-version = '0.4.0'
+release = '0.5.0'
+version = '0.5.0'
 
 # -- General configuration
 

@@ -7,7 +7,7 @@ try:
 except ImportError:
     from setuptools import Extension as Pybind11Extension, build_ext
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 name = "jetsimpy"
 
 ext_modules = [
