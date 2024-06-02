@@ -65,8 +65,8 @@ double Adaptive_1D(F& f, const Array1D xini, const double xtol, const double rto
             // test if refinement is needed
             need_refine = (
                 // local relative error
-                std::abs(itv.lorder - itv.horder) > xtol * itv.h / h_tot + rtol * std::abs(itv.horder)
-                &&
+                //std::abs(itv.lorder - itv.horder) > xtol * itv.h / h_tot + rtol * std::abs(itv.horder)
+                //&&
                 // globally relative local error (Gander & Gautschi 2001 ?)
                 std::abs(itv.lorder - itv.horder) * intervals_size > xtol + rtol * std::abs(integral_tot)
             );
