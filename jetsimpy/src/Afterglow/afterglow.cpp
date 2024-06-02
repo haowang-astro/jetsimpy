@@ -45,7 +45,7 @@ double Afterglow::Intensity(const double Tobs, const double nu, const double the
     double nu_src = nu_z / blast.doppler;
     
     // solve emissivity at comoving frame
-    double emissivity = (*emissivity_model)(nu_src, param, blast);
+    double emissivity = emissivity_model(nu_src, param, blast);
 
     // convert to intensity at observer's frame
     return emissivity / 4.0 / PI * blast.dR * blast.doppler * blast.doppler * blast.doppler;
@@ -56,7 +56,7 @@ double Afterglow::dL_dOmega(const double Tobs_z, const double nu_z, const double
     double nu_src = nu_z / blast.doppler;
     
     // solve emissivity at comoving frame
-    double emissivity = (*emissivity_model)(nu_src, param, blast);
+    double emissivity = emissivity_model(nu_src, param, blast);
 
     return emissivity * blast.dR * blast.R * blast.R * blast.doppler * blast.doppler * blast.doppler;
 }
@@ -133,7 +133,7 @@ double Afterglow::integrateModel(const double Tobs, const double nu, const doubl
         // solve equal-arrival-time-surface and get blast properties
         eats->solveBlast(Tobs_z, theta, phi, theta_v, blast);
 
-        return (*avg_model)(nu_src, param, blast) * dL_dOmega(Tobs_z, nu_z, theta, phi);
+        return avg_model(nu_src, param, blast) * dL_dOmega(Tobs_z, nu_z, theta, phi);
     };
 
     // beaming angle

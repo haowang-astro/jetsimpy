@@ -14,6 +14,7 @@
 #include <iterator>
 #include <limits>
 #include <chrono>
+#include <functional>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 

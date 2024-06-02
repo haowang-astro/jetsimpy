@@ -4,7 +4,7 @@
 #include "../environment.h"
 #include "blast.h"
 
-using ModelDict = std::map<std::string, double(*)(const double, const Dict&, const Blast&)>;
+using ModelDict = std::map<std::string, std::function<double(const double, const Dict&, const Blast&)>>;
 
 struct Models {
     // models to be registered in "models.cpp"

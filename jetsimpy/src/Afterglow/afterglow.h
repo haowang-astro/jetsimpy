@@ -37,8 +37,8 @@ private:
     Dict param;     // parameter dictionary from python side
 
     // model function (pointer) to be called in integration
-    double (*emissivity_model)(const double, const Dict&, const Blast&);
-    double (*avg_model)(const double, const Dict&, const Blast&);
+    std::function<double(const double, const Dict&, const Blast&)> emissivity_model;
+    std::function<double(const double, const Dict&, const Blast&)> avg_model;
 
     // model object to store model functions
     Models models;
