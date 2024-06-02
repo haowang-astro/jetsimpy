@@ -115,7 +115,10 @@ class Jet:
         self._jet.configParameters(P)
 
         # config emissivity model
-        self._jet.configEmissivity(model)
+        if isinstance(model, str):
+            self._jet.configEmissivity(model)
+        else:
+            self._jet.configEmissivityPy(model)
 
         try:
             L = self._jet.calculateLuminosity(t, nu, rtol)
@@ -129,10 +132,16 @@ class Jet:
         self._jet.configParameters(P)
 
         # config emissivity model
-        self._jet.configEmissivity(emissitivy_model)
+        if isinstance(emissitivy_model, str):
+            self._jet.configEmissivity(emissitivy_model)
+        else:
+            self._jet.configEmissivityPy(emissitivy_model)
 
         # config average model
-        self._jet.configAvgModel(average_model)
+        if isinstance(average_model, str):
+            self._jet.configAvgModel(average_model)
+        else:
+            self._jet.configAvgModelPy(average_model)
 
         # calculate weighted average
         try:

@@ -34,6 +34,22 @@ void Afterglow::configAvgModel(const std::string& model_name) {
     }
 }
 
+void Afterglow::configEmissivityPy(py::function py_f) {
+    emissivity_model = [py_f](const double nu, const Dict& P, const Blast& blast) {
+        py::object obj = py_f(nu, P, blast);
+        double emissivity = obj.cast<double>();
+        return emissivity;
+    };
+}
+
+void Afterglow::configAvgModelPy(py::function py_f) {
+    avg_model = [py_f](const double nu, const Dict& P, const Blast& blast) {
+        py::object obj = py_f(nu, P, blast);
+        double return_val = obj.cast<double>();
+        return return_val;
+    };
+}
+
 double Afterglow::Intensity(const double Tobs, const double nu, const double theta, const double phi) {
     double Tobs_z = Tobs / (1 + z);
     double nu_z = nu * (1 + z);

@@ -32,6 +32,8 @@ public:
     void configParameters(const Dict& param);              // configurate parameter dictionary
     void configEmissivity(const std::string& model_name);  // configurate emissivity model
     void configAvgModel(const std::string& model_name);    // configure average models
+    void configEmissivityPy(py::function py_f);            // configure emissivity model from python side
+    void configAvgModelPy(py::function py_f);              // configure average models from python side
     double calculateEATS(double Tobs, double theta, double phi, double theta_v, double z);    // calculate t of EATS
     double calculateIntensity(double Tobs, double nu, double theta, double phi);    // intensity in Jet coordinate
     double calculateLuminosity(double Tobs, double nu, double rtol);    // integrate luminosity

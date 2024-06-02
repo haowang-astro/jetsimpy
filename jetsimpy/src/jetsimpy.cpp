@@ -153,6 +153,14 @@ void Jet::configAvgModel(const std::string& model_name) {
     afterglow.configAvgModel(model_name);
 }
 
+void Jet::configEmissivityPy(py::function py_f) {
+    afterglow.configEmissivityPy(py_f);
+}
+
+void Jet::configAvgModelPy(py::function py_f) {
+    afterglow.configAvgModelPy(py_f);
+}
+
 double Jet::calculateLuminosity(double Tobs, double nu, double rtol) {
     return afterglow.Luminosity(Tobs, nu, rtol);
 }

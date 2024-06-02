@@ -18,7 +18,10 @@ public:
     void configParameters(const Dict& param);              // configurate parameter dictionary
     void configEmissivity(const std::string& model_name);  // configure emissivity model
     void configAvgModel(const std::string& model_name);    // configure average models
-    
+
+    void configEmissivityPy(py::function py_f);            // configure emissivity model from python side
+    void configAvgModelPy(py::function py_f);              // configure average models from python side
+
     // calculate the specific intensity
     double Intensity(const double Tobs, const double nu, const double theta, const double phi);
 
