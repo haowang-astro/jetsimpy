@@ -118,8 +118,7 @@ void SimBox::solveEigen() {
         alpha2 = std::abs(alpha2);
         alpha3 = std::abs(alpha3);
 
-        //eigenvalues[i] = std::max(std::max(alpha1, alpha2), alpha3) * CSpeed / R[i];
-        eigenvalues[i] = std::max(std::max(alpha1, alpha2), alpha3) * CSpeed;
+        eigenvalues[i] = std::max(std::max(alpha1, alpha2), alpha3) * CSpeed / R[i];
         alpha_R[i] = std::abs(beta_th[i]) / R[i];
     }
 }
@@ -235,16 +234,11 @@ void SimBox::solveNumericalFlux() {
         int index_r = std::min(i + 1, ntheta - 1);
         alpha = *std::max_element(eigenvalues.begin() + index_l, eigenvalues.begin() + index_r);
 
-        // numerical flux
-        numerical_flux[0][i] = 0.5 * (F_l[0] + F_r[0] - alpha * (Eb_r / R_r - Eb_l / R_l));
-        numerical_flux[1][i] = 0.5 * (F_l[1] + F_r[1] - alpha * (Ht_r / R_r - Ht_l / R_l));
-        numerical_flux[2][i] = 0.5 * (F_l[2] + F_r[2] - alpha * (Msw_r / R_r - Msw_l / R_l));
-        numerical_flux[3][i] = 0.5 * (F_l[3] + F_r[3] - alpha * (Mej_r / R_r - Mej_l / R_l));
-        
-        //numerical_flux[0][i] = 0.5 * (F_l[0] + F_r[0] - alpha * (Eb_r - Eb_l));
-        //numerical_flux[1][i] = 0.5 * (F_l[1] + F_r[1] - alpha * (Ht_r - Ht_l));
-        //numerical_flux[2][i] = 0.5 * (F_l[2] + F_r[2] - alpha * (Msw_r - Msw_l));
-        //numerical_flux[3][i] = 0.5 * (F_l[3] + F_r[3] - alpha * (Mej_r - Mej_l));
+        // numerical flux        
+        numerical_flux[0][i] = 0.5 * (F_l[0] + F_r[0] - alpha * (Eb_r - Eb_l));
+        numerical_flux[1][i] = 0.5 * (F_l[1] + F_r[1] - alpha * (Ht_r - Ht_l));
+        numerical_flux[2][i] = 0.5 * (F_l[2] + F_r[2] - alpha * (Msw_r - Msw_l));
+        numerical_flux[3][i] = 0.5 * (F_l[3] + F_r[3] - alpha * (Mej_r - Mej_l));
         for (int j = 0 ; j < 4; ++j) {
             numerical_flux[j][i] *= std::sin(theta_edge[i]);
         }
@@ -262,8 +256,7 @@ double SimBox::solveDeltaT() {
         omega = beta[i] * CSpeed / R[i];
 
         // combined signal speed and maximum omega
-        //omega_all = eigenvalues[i] + 0.05 * omega;
-        omega_all = eigenvalues[i] / R[i] + 0.05 * omega;
+        omega_all = eigenvalues[i] + 0.05 * omega;
         //omega_all = omega;
 
         // delta_t of a cell
