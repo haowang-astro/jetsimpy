@@ -4,10 +4,12 @@
     quickstart
     hydro
     afterglow
+    custom
+    weighted
 
 jetsimpy
 ========
-*jetsimpy* is a Gamma-ray burst afterglows modeling tool designed for arbitrary angular energy and Lorentz factor profile. It includes the hydrodynamic simulation of the relativistic jet, and the synchrotron radiation on top of it.
+**jetsimpy** is a Gamma-ray burst afterglows modeling tool designed for arbitrary angular energy and Lorentz factor profile. It includes the hydrodynamic simulation of the relativistic jet, and the synchrotron radiation on top of it.
 
 Installation
 ============
