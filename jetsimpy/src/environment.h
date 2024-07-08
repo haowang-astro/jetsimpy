@@ -33,7 +33,6 @@ namespace py = pybind11;
 using Array1D = std::vector<double>;
 using Array2D = std::vector<Array1D>;
 using Array3D = std::vector<Array2D>;
-using Dict = std::map<std::string, double>;
 
 // array constructions
 inline Array1D Array(int n1, double fill = 0.0) {

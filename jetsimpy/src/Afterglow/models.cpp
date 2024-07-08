@@ -15,7 +15,7 @@ void Models::registerEmissivity() {
     // };
 
     // ---------- default radiation model (Sari 1998) ---------- //
-    emissivity_models["sync"] = [](const double nu, const Dict& P, const Blast& blast) {
+    emissivity_models["sync"] = [&](const double nu, const Dict& P, const Blast& blast) {
         double eps_e = P.at("eps_e");
         double eps_b = P.at("eps_b");
         double p = P.at("p");
@@ -62,7 +62,7 @@ void Models::registerEmissivity() {
     };
 
     // Bonus! deep newtonian phase correction
-    emissivity_models["sync_dnp"] = [](const double nu, const Dict& P, const Blast& blast) {
+    emissivity_models["sync_dnp"] = [&](const double nu, const Dict& P, const Blast& blast) {
         double eps_e = P.at("eps_e");
         double eps_b = P.at("eps_b");
         double p = P.at("p");
