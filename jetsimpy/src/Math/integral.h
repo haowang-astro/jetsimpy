@@ -29,7 +29,7 @@ template<class F>
 double Adaptive_1D(F& f, const Array1D xini, const double xtol, const double rtol, const int max_iter = 50) {
     // initialize interval
     Interval new_itv;
-    std::vector<Interval> intervals = {new_itv};
+    std::vector<Interval> intervals = {};
     double integral_tot = 0.0;
     int xsize = xini.size();
     for (int i = 0; i < xsize - 1; ++i) {
