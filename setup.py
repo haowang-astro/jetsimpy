@@ -42,6 +42,7 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         'numpy',
+        'pybind11',
     ],
     include_package_data=True,
     cmdclass={"clean": CleanCommand},

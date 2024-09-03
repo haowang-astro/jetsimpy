@@ -4,6 +4,7 @@
 #include <cmath>
 #include <map>
 #include <string>
+#include <functional>
 #include "blast.h"
 
 using Dict = std::map<std::string, double>;
