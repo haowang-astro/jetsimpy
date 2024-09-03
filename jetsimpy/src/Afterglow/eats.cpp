@@ -157,7 +157,7 @@ void EATS::deriveBlast(double theta, double phi, double theta_v, const Array1D& 
     blast.dR = Msw / R / R / blast.n_blast / MassP;
 }
 
-void EATS::solveBlast(double Tobs_z, double theta, double phi, double theta_v, Blast& blast) {
+void EATS::solveBlast_type1(double Tobs_z, double theta, double phi, double theta_v, Blast& blast) {
     // find theta index
     int theta_index1;
     int theta_index2;
@@ -305,4 +305,118 @@ double EATS::solveEATS(double Tobs_z, double theta, double phi, double theta_v) 
     }
 
     return val[5];
+}
+
+void EATS::solveInterpolatedEATS(double mu, double Tobs_z, double theta, double& t, int& t_index1, int& t_index2) {
+    // find theta
+    int theta_index1, theta_index2;
+    findThetaIndex(theta, theta_index1, theta_index2);
+
+    // equal arrival time surface function at t_index
+    auto f = [&](const int& t_index) {
+        // r at theta, t_index
+        double r1 = (*y_data)[4][theta_index1][t_index];
+        double r2 = (*y_data)[4][theta_index2][t_index];
+        double r = theta_index1 == theta_index2 ? r1 : (r2 - r1) / ((*theta_data)[theta_index2] - (*theta_data)[theta_index1]) * (theta - (*theta_data)[theta_index1]) + r1;
+
+        // t at t_index
+        double t = (*t_data)[t_index];
+
+        // equal arrival time surface function
+        return t - r * mu / CSpeed - Tobs_z;
+    };
+
+    // find t index (binary search)
+    //int t_index1, t_index2;
+    if (f(0) > 0) { // smaller than tmin
+        t_index1 = 0;
+        t_index2 = 0;
+    }
+    else if (f(nt - 1) < 0) { // larger than tmax
+        // throw error
+        throw std::runtime_error("EATS: Observing time exceeds PDE maximum evolution time!\n");
+    }
+    else {
+        t_index1 = 0;
+        t_index2 = nt - 1;
+        int index_mid;
+        while (t_index2 - t_index1 > 1) {
+            index_mid = (t_index1 + t_index2) / 2;
+            if (f(index_mid) > 0) {
+                t_index2 = index_mid;
+            }
+            else {
+                t_index1 = index_mid;
+            }
+        }
+    }
+
+    // find exact t
+    if (t_index1 == t_index2) {
+        t = (*t_data)[t_index1];
+    }
+    else {
+        double r1 = tool->linear(theta, (*theta_data)[theta_index1], (*theta_data)[theta_index2], (*y_data)[4][theta_index1][t_index1], (*y_data)[4][theta_index2][t_index1]);
+        double r2 = tool->linear(theta, (*theta_data)[theta_index1], (*theta_data)[theta_index2], (*y_data)[4][theta_index1][t_index2], (*y_data)[4][theta_index2][t_index2]);
+        double slope = (r2 - r1) / ((*t_data)[t_index2] - (*t_data)[t_index1]);
+        t = (Tobs_z - mu / CSpeed * (slope * (*t_data)[t_index1] - r1)) / (1.0 - mu * slope / CSpeed);
+    }
+}
+
+void EATS::solveBlast_type2(double Tobs_z, double theta, double phi, double theta_v, Blast& blast) {
+    // find theta
+    int theta_index1, theta_index2;
+    findThetaIndex(theta, theta_index1, theta_index2);
+
+    // cos angle
+    double mu = std::cos(theta) * std::cos(theta_v) + std::sin(theta) * std::cos(phi) * std::sin(theta_v);
+    
+    // find t
+    double t;
+    int t_index1, t_index2;
+    solveInterpolatedEATS(mu, Tobs_z, theta, t, t_index1, t_index2);
+
+    // interpolate the primitive variables
+    Array1D val = Array(6);      // [Msw, Mej, beta_gamma_sq, beta_th, R, t]
+    for (int i = 0; i < 5; ++i) {
+        // interpolate y over theta
+        double y1 = tool->linear(
+            theta, (*theta_data)[theta_index1], (*theta_data)[theta_index2], 
+            (*y_data)[i][theta_index1][t_index1], (*y_data)[i][theta_index2][t_index1]
+        );
+
+        double y2 = tool->linear(
+            theta, (*theta_data)[theta_index1], (*theta_data)[theta_index2], 
+            (*y_data)[i][theta_index1][t_index2], (*y_data)[i][theta_index2][t_index2]
+        );
+
+        val[i] = tool->linear(
+            t, (*t_data)[t_index1], (*t_data)[t_index2], 
+            y1, y2
+        );
+    }
+    val[5] = t;
+
+    // construct blast object
+    deriveBlast(theta, phi, theta_v, val, blast);
+}
+
+void EATS::solveBlast(double Tobs_z, double theta, double phi, double theta_v, Blast& blast) {
+    // find theta
+    int theta_index1, theta_index2;
+    findThetaIndex(theta, theta_index1, theta_index2);
+
+    if (theta_index1 == theta_index2) {
+        solveBlast_type2(Tobs_z, theta, phi, theta_v, blast);
+    }
+    else {
+        double beta_gamma_sq1 = (*y_data)[2][theta_index1][0];
+        double beta_gamma_sq2 = (*y_data)[2][theta_index2][0];
+        if (std::min(beta_gamma_sq1, beta_gamma_sq2) * 10 < std::max(beta_gamma_sq1, beta_gamma_sq2)) {
+            solveBlast_type1(Tobs_z, theta, phi, theta_v, blast);
+        }
+        else {
+            solveBlast_type2(Tobs_z, theta, phi, theta_v, blast);
+        }
+    }
 }

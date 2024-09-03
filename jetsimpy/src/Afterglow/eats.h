@@ -12,7 +12,13 @@ public:
     EATS() {}
     void feedData(SimBox& sim_box, Tool& tool);    // feed PDE data
 
-    // solve EATS & blast properties
+    // solve EATS & blast properties (by interpolate EATS)
+    void solveBlast_type1(double Tobs_z, double theta, double phi, double theta_v, Blast& blast);
+
+    // solve EATS & blast properties (by interpolate PDE)
+    void solveBlast_type2(double Tobs_z, double theta, double phi, double theta_v, Blast& blast);
+
+    // choose one of the ways
     void solveBlast(double Tobs_z, double theta, double phi, double theta_v, Blast& blast);
 
     // simply solve eats
@@ -35,6 +41,9 @@ private:
     // find index by binary search
     void findThetaIndex(double theta, int& theta_index1, int& theta_index2);
     void findTimeIndex(double mu, double Tobs_z, int theta_index, int& t_index1, int& t_index2);
+
+    // find t directly on interpolated PDE data by binary search
+    void solveInterpolatedEATS(double mu, double Tobs_z, double theta, double& t, int& t_index1, int& t_index2);
 
     // solve t for EATS at theta_index
     double solveT(double mu, double Tobs_z, int theta_index, int t_index1, int t_index2);
