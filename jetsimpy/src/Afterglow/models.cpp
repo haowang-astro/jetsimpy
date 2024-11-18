@@ -16,9 +16,15 @@ void Models::registerEmissivity() {
 
     // ---------- default radiation model (Sari 1998) ---------- //
     emissivity_models["sync"] = [&](const double nu, const Dict& P, const Blast& blast) {
-        double eps_e = P.at("eps_e");
-        double eps_b = P.at("eps_b");
-        double p = P.at("p");
+        double eps_e, eps_b, p;
+        try {
+            eps_e = P.at("eps_e");
+            eps_b = P.at("eps_b");
+            p = P.at("p");
+        }
+        catch (const std::exception& e) {
+            throw std::runtime_error("The following parameters are required for the model 'sync': 'eps_e', 'eps_b', and 'p'.");
+        }
         
         double n_blast = blast.n_blast;
         double t = blast.t;
@@ -63,9 +69,15 @@ void Models::registerEmissivity() {
 
     // Bonus! deep newtonian phase correction
     emissivity_models["sync_dnp"] = [&](const double nu, const Dict& P, const Blast& blast) {
-        double eps_e = P.at("eps_e");
-        double eps_b = P.at("eps_b");
-        double p = P.at("p");
+        double eps_e, eps_b, p;
+        try {
+            eps_e = P.at("eps_e");
+            eps_b = P.at("eps_b");
+            p = P.at("p");
+        }
+        catch (const std::exception& e) {
+            throw std::runtime_error("The following parameters are required for the model 'sync_dnp': 'eps_e', 'eps_b', and 'p'.");
+        }
         
         double n_blast = blast.n_blast;
         double t = blast.t;

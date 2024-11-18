@@ -10,9 +10,15 @@ void Afterglow::initialize(SimBox& sim_box, EATS& eats) {
 
 void Afterglow::configParameters(const Dict& param) {
     // save important parameters and perform parameter checking
-    theta_v = param.at("theta_v");
-    d = param.at("d");
-    z = param.at("z");
+    try {
+        this->theta_v = param.at("theta_v");
+        this->d = param.at("d");
+        this->z = param.at("z");
+    }
+    catch (const std::exception& e) {
+        throw std::runtime_error("The following parameters are mandatory: 'theta_v', 'd', and 'z'.");
+    }
+    
     this->param = param;
 }
 
