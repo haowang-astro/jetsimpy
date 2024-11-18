@@ -1,6 +1,4 @@
 import numpy as np
-from numpy.typing import NDArray
-from typing import Dict
 from . import jetsimpy_extension as _extension
 from ._grid import Uniform
 

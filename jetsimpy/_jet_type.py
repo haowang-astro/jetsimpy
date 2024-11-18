@@ -1,8 +1,7 @@
 import numpy as np
-from numpy.typing import NDArray
 
 # top-hat jet
-def TopHat(theta_c: float, Eiso: float, lf0=1e100) -> NDArray:
+def TopHat(theta_c, Eiso, lf0=1e100):
     theta = theta = np.linspace(0, np.pi, 10000)
     
     energy = Eiso * np.ones_like(theta)
@@ -14,7 +13,7 @@ def TopHat(theta_c: float, Eiso: float, lf0=1e100) -> NDArray:
     return (theta, energy, lf)
 
 # Gaussian jet
-def Gaussian(theta_c: float, Eiso: float, lf0=1e100) -> NDArray:
+def Gaussian(theta_c, Eiso, lf0=1e100):
     theta = theta = np.linspace(0, np.pi, 10000)
 
     energy = Eiso * np.exp(- 0.5 * (theta / theta_c) ** 2)
@@ -23,7 +22,7 @@ def Gaussian(theta_c: float, Eiso: float, lf0=1e100) -> NDArray:
     return (theta, energy, lf)
 
 # power-law jet
-def PowerLaw(theta_c: float, Eiso: float, lf0=1e100, s=4.0) -> NDArray:
+def PowerLaw(theta_c, Eiso, lf0=1e100, s=4.0):
     theta = theta = np.linspace(0, np.pi, 10000)
 
     energy = Eiso * np.power(1 + (theta / theta_c) ** 2, - s / 2.0)

@@ -1,8 +1,7 @@
 import numpy as np
-from numpy.typing import NDArray
 
 # cell edges assuming forward-jet
-def NorthPole(theta_c: float, npoints: int) -> NDArray:
+def NorthPole(theta_c, npoints):
     arcsinhcells = np.linspace(0, np.arcsinh(np.pi / theta_c), npoints)
     cells = np.sinh(arcsinhcells) * theta_c
     cells[0] = 0.0
@@ -10,7 +9,7 @@ def NorthPole(theta_c: float, npoints: int) -> NDArray:
     return cells
 
 # cell edges assuming counter-jet
-def SouthPole(theta_c: float, npoints: int) -> NDArray:
+def SouthPole(theta_c, npoints):
     cells = NorthPole(theta_c, npoints)
     cells = np.pi - cells
     cells = np.flip(cells)
@@ -19,7 +18,7 @@ def SouthPole(theta_c: float, npoints: int) -> NDArray:
     return cells
 
 # cell edges assuming forward-jet & counter-jet
-def BothPoles(theta_c: float, npoints: int) -> NDArray:
+def BothPoles(theta_c, npoints):
     half_points = int(npoints / 2) + 1
     arcsinhcells = np.linspace(0, np.arcsinh(np.pi / theta_c / 2.0), half_points)
     cells_n = np.sinh(arcsinhcells) * theta_c * 2.0
@@ -36,7 +35,7 @@ def BothPoles(theta_c: float, npoints: int) -> NDArray:
     return cells
 
 # equal spacing
-def Uniform(npoints: int) -> NDArray:
+def Uniform(npoints):
     cells = np.linspace(0.0, np.pi, npoints)
     cells[0] = 0.0
     cells[-1] = np.pi
