@@ -98,10 +98,10 @@ double golden_section(F& f, const double& xx1, const double& xx2, const double& 
         n += 1;
     }
 
-    if (n >= max_iter) {
-        std::string text = "Optimizer doesn't converge after " + std::to_string(max_iter) + " interations!\n";
-        throw std::runtime_error(text);
-    }
+    //if (n >= max_iter) {
+    //    std::string text = "Optimizer doesn't converge after " + std::to_string(max_iter) + " interations!\n";
+    //    throw std::runtime_error(text);
+    //}
 
     return (xm1 + xm2) / 2.0;
 }

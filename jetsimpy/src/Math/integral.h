@@ -26,7 +26,7 @@ struct Interval {
 
 // Adaptive 1D integral with initial x samples
 template<class F>
-double Adaptive_1D(F& f, const Array1D xini, const double xtol, const double rtol, const int max_iter = 50) {
+double Adaptive_1D(F& f, const Array1D xini, const double xtol, const double rtol, const int max_iter = 50, const bool force_return = true) {
     // initialize interval
     Interval new_itv;
     std::vector<Interval> intervals = {};
@@ -115,21 +115,26 @@ double Adaptive_1D(F& f, const Array1D xini, const double xtol, const double rto
         }
     }
 
-    // if integral does not converge in max_iter loops, throw error
-    throw std::runtime_error("Integral: Not converged after " + std::to_string(max_iter) + " iterations!");
+    if (force_return) {
+        return integral_tot;
+    }
+    else {
+        // if integral does not converge in max_iter loops, throw error
+        throw std::runtime_error("Adaptive integration: convergence NOT achieved after " + std::to_string(max_iter) + " iterations! Increase 'max_iter' or set 'force_return = True'.");
+    }
 }
 
 // Adaptive 2D integral with initial x and y samples
 template<class F>
-double Adaptive_2D(F& f, const Array1D& xini, const Array1D& yini, const double xtol, const double rtol, const int max_iter = 50) {
+double Adaptive_2D(F& f, const Array1D& xini, const Array1D& yini, const double xtol, const double rtol, const int max_iter = 50, const bool force_return = true) {
     auto g = [&](const double y) {
         auto h = [&](const double x) {
             return f(x, y);
         };
-        double result = Adaptive_1D(h, xini, xtol, rtol, max_iter);
+        double result = Adaptive_1D(h, xini, xtol, rtol, max_iter, force_return);
         return result;
     };
-    return Adaptive_1D(g, yini, xtol, rtol, max_iter);
+    return Adaptive_1D(g, yini, xtol, rtol, max_iter, force_return);
 }
 
 #endif

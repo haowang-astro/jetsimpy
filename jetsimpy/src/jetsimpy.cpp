@@ -161,12 +161,12 @@ void Jet::configAvgModelPy(py::function py_f) {
     afterglow.configAvgModelPy(py_f);
 }
 
-double Jet::calculateLuminosity(double Tobs, double nu, double rtol) {
-    return afterglow.Luminosity(Tobs, nu, rtol);
+double Jet::calculateLuminosity(double Tobs, double nu, double rtol, const int max_iter, const bool force_return) {
+    return afterglow.Luminosity(Tobs, nu, rtol, max_iter, force_return);
 }
 
-double Jet::calculateAvgModel(double Tobs, double nu, double rtol) {
-    return afterglow.integrateModel(Tobs, nu, rtol);
+double Jet::calculateAvgModel(double Tobs, double nu, double rtol, const int max_iter, const bool force_return) {
+    return afterglow.integrateModel(Tobs, nu, rtol, max_iter, force_return);
 }
 
 double Jet::WeightedAverage(double Tobs, double nu, double rtol) {

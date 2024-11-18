@@ -36,8 +36,8 @@ public:
     void configAvgModelPy(py::function py_f);              // configure average models from python side
     double calculateEATS(double Tobs, double theta, double phi, double theta_v, double z);    // calculate t of EATS
     double calculateIntensity(double Tobs, double nu, double theta, double phi);    // intensity in Jet coordinate
-    double calculateLuminosity(double Tobs, double nu, double rtol);    // integrate luminosity
-    double calculateAvgModel(double Tobs, double nu, double rtol);      // integrate average model
+    double calculateLuminosity(double Tobs, double nu, double rtol, const int max_iter = 50, const bool force_return = true);    // integrate luminosity
+    double calculateAvgModel(double Tobs, double nu, double rtol, const int max_iter = 50, const bool force_return = true);      // integrate average model
     double WeightedAverage(double Tobs, double nu, double rtol);
     double IntensityOfPixel(const double Tobs, const double nu, const double x_tilde, const double y_tilde);
 

@@ -26,10 +26,10 @@ public:
     double Intensity(const double Tobs, const double nu, const double theta, const double phi);
 
     // total luminosity
-    double Luminosity(const double Tobs, const double nu, const double rtol);
+    double Luminosity(const double Tobs, const double nu, const double rtol, const int max_iter = 50, const bool force_return = true);
 
     // integrate average model with dL_dOmega as the weight
-    double integrateModel(const double Tobs, const double nu, const double rtol);
+    double integrateModel(const double Tobs, const double nu, const double rtol, const int max_iter = 50, const bool force_return = true);
 
     // intensity of pixel (useful for sky map)
     double IntensityOfPixel(const double Tobs, const double nu, const double x_tilde, const double y_tilde);

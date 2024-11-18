@@ -110,7 +110,7 @@ class Jet:
         return I
     
     # flux density [mJy]
-    def FluxDensity(self, t, nu, P, model="sync", rtol=1e-3):
+    def FluxDensity(self, t, nu, P, model="sync", rtol=1e-3, max_iter=100, force_return=True):
         # config parameters
         self._jet.configParameters(P)
 
@@ -121,13 +121,13 @@ class Jet:
             self._jet.configEmissivityPy(model)
 
         try:
-            L = self._jet.calculateLuminosity(t, nu, rtol)
+            L = self._jet.calculateLuminosity(t, nu, rtol, max_iter, force_return)
         except Exception as e:
             raise e
         
         return L * (1 + P["z"]) / 4 / np.pi / (P["d"] * _MPC) ** 2 / _mJy
     
-    def WeightedAverage(self, t, nu, P, emissitivy_model="sync", average_model="offset", rtol=1e-3):
+    def WeightedAverage(self, t, nu, P, emissitivy_model="sync", average_model="offset", rtol=1e-3, max_iter=100, force_return=True):
         # config parameters
         self._jet.configParameters(P)
 
@@ -145,20 +145,20 @@ class Jet:
 
         # calculate weighted average
         try:
-            weighted_average = self._jet.WeightedAverage(t, nu, rtol)
+            weighted_average = self._jet.WeightedAverage(t, nu, rtol, max_iter, force_return)
         except Exception as e:
             raise e
         
         return weighted_average
 
     # apparent superluminal motion [mas]
-    def Offset(self, t, nu, P, model="sync", rtol=1e-3):
-        offset_cgs = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="offset", rtol=rtol)
+    def Offset(self, t, nu, P, model="sync", rtol=1e-3, max_iter=100, force_return=True):
+        offset_cgs = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="offset", rtol=rtol, max_iter=max_iter, force_return=force_return)
 
         return offset_cgs / P["d"] / _MPC / (1.0 + P["z"]) / (1.0 + P["z"]) / _MAS
     
     # size along the jet axis [mas]
-    def SizeX(self, t, nu, P, model="sync", rtol=1e-3):
+    def SizeX(self, t, nu, P, model="sync", rtol=1e-3, max_iter=100, force_return=True):
         # calculate xscale. The following notes are for myself in case I forget what is going on.
         # First, ∫x dL = xc * ∫dL based on xc defination.
         # Then, 
@@ -170,10 +170,10 @@ class Jet:
         # So, I only need to calculate the weighted avergae of x^2, not the original expression.
 
         # calculate offset
-        xc = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="offset", rtol=rtol)
+        xc = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="offset", rtol=rtol, max_iter=max_iter, force_return=force_return)
 
         # calculate x_sq
-        x_sq = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="sigma_x", rtol=rtol)
+        x_sq = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="sigma_x", rtol=rtol, max_iter=max_iter, force_return=force_return)
 
         # xscale
         sigma_x = np.sqrt(x_sq - xc * xc)
@@ -181,8 +181,8 @@ class Jet:
         return sigma_x / P["d"] / _MPC / (1.0 + P["z"]) / (1.0 + P["z"]) / _MAS
     
     # size perpendicular to the jet axis [mas]
-    def SizeY(self, t, nu, P, model="sync", rtol=1e-3):
-        sigma_y_sq = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="sigma_y", rtol=rtol)
+    def SizeY(self, t, nu, P, model="sync", rtol=1e-3, max_iter=100, force_return=True):
+        sigma_y_sq = self.WeightedAverage(t, nu, P, emissitivy_model=model, average_model="sigma_y", rtol=rtol, max_iter=max_iter, force_return=force_return)
         sigma_y = np.sqrt(sigma_y_sq)
 
         return sigma_y / P["d"] / _MPC / (1.0 + P["z"]) / (1.0 + P["z"]) / _MAS

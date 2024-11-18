@@ -66,6 +66,8 @@ flux2 = jet2.FluxDensity(
     P,                 # parameter dictionary
     model="sync",      # emissivity model
     rtol=1e-3,         # integration tolerance
+    max_iter=100,
+    force_return=True
 )
 
 # plot the light curves

@@ -77,7 +77,7 @@ double Afterglow::dL_dOmega(const double Tobs_z, const double nu_z, const double
     return emissivity * blast.dR * blast.R * blast.R * blast.doppler * blast.doppler * blast.doppler;
 }
 
-double Afterglow::Luminosity(const double Tobs, const double nu, const double rtol) {
+double Afterglow::Luminosity(const double Tobs, const double nu, const double rtol, const int max_iter, const bool force_return) {
     double Tobs_z = Tobs / (1 + z);
     double nu_z = nu * (1 + z);
     double theta_peak = findPeak(Tobs_z, nu_z);
@@ -116,12 +116,12 @@ double Afterglow::Luminosity(const double Tobs, const double nu, const double rt
     Array1D phi_samples = {0.0, PI};
 
     // multiply by 2 because the integral domain for phi is [0, pi].
-    double luminosity = Adaptive_2D(f, cos_theta_samples, phi_samples, 0.0, rtol) * 2.0;
+    double luminosity = Adaptive_2D(f, cos_theta_samples, phi_samples, 0.0, rtol, max_iter, force_return) * 2.0;
 
     return luminosity;
 }
 
-double Afterglow::integrateModel(const double Tobs, const double nu, const double rtol) {
+double Afterglow::integrateModel(const double Tobs, const double nu, const double rtol, const int max_iter, const bool force_return) {
     double Tobs_z = Tobs / (1 + z);
     double nu_z = nu * (1 + z);
     double theta_peak = findPeak(Tobs_z, nu_z);
@@ -160,7 +160,7 @@ double Afterglow::integrateModel(const double Tobs, const double nu, const doubl
     Array1D cos_theta_samples = {-1.0, std::cos(beaming_angle), std::cos(beaming_angle / 2.0), 1.0};
     Array1D phi_samples = {0.0, PI, 2.0 * PI};
 
-    double integral = Adaptive_2D(f, cos_theta_samples, phi_samples, 0.0, rtol);
+    double integral = Adaptive_2D(f, cos_theta_samples, phi_samples, 0.0, rtol, max_iter, force_return);
 
     return integral;
 }
