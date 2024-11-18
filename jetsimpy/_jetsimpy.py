@@ -15,7 +15,7 @@ class Jet:
         nwind,                # [wind density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
         nism,                 # [ism density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
         tmin=10.0,            # [simulation start time]: (s)
-        tmax=3.2e9,           # [simulation end time]: (s)
+        tmax=1e10,           # [simulation end time]: (s)
         grid=Uniform(257),    # [cell edge angles]: start with 0 and end with pi.
         tail=True,            # [isotropic tail]: add an extremely low energy low velocity isotropic tail for safty
         spread=True,          # [spreading]: spread or not
