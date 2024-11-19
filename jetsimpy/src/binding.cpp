@@ -39,9 +39,9 @@ PYBIND11_MODULE(jetsimpy_extension, m) {
 
         // ---------- afterglow calculation ---------- //
         .def("configParameters", &Jet::configParameters)
-        .def("configEmissivity", &Jet::configEmissivity)
+        .def("configIntensity", &Jet::configIntensity)
         .def("configAvgModel", &Jet::configAvgModel)
-        .def("configEmissivityPy", &Jet::configEmissivityPy)
+        .def("configIntensityPy", &Jet::configIntensityPy)
         .def("configAvgModelPy", &Jet::configAvgModelPy)
         .def("calculateEATS", py::vectorize(&Jet::calculateEATS))
         .def("calculateIntensity", py::vectorize(&Jet::calculateIntensity))

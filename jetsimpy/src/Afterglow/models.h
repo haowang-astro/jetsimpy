@@ -22,11 +22,11 @@ struct Models {
     const double MAS = 1.0 / 206264806.24709466;
 
     // models to be registered in "models.cpp"
-    ModelDict emissivity_models;
+    ModelDict radiation_models;
     ModelDict avg_models;
 
-    // register emissivity models
-    void registerEmissivity();
+    // register radiation models
+    void registerIntensity();
 
     // register average models for weighted average calculation
     void registerAvgModels();

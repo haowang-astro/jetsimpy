@@ -64,7 +64,8 @@ def sync_dnp(nu, Psync, blast):
         else:
             emissivity = e_p / np.sqrt(nu_m / nu_c) * np.power(nu / nu_m, - p / 2)
     
-    return emissivity
+    isotropic_intensity = emissivity * blast.dR
+    return isotropic_intensity
 
 # define the observing time and frequency
 tday = np.logspace(-2, 4, 100)

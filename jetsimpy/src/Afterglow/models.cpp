@@ -1,9 +1,9 @@
 #include "models.h"
 
-void Models::registerEmissivity() {
-    // The template of a emissivity model:
+void Models::registerIntensity() {
+    // The template of a radiation model:
     //
-    // emissivity_models["model_name"] = [](    // "model_name" is the keyword used from Python side
+    // radiation_models["model_name"] = [](    // "model_name" is the keyword used from Python side
     //    const double nu,               // frequency
     //    const Dict& P,                 // parameter dictionary from Python side
     //    const Blast& blast,            // an object that contains all fluid element properties
@@ -11,11 +11,11 @@ void Models::registerEmissivity() {
     //
     //     ...
     //
-    //     return emissivity;            // return value must be a "double"
+    //     return isotropic_intensity;            // return value must be a "double"
     // };
 
     // ---------- default radiation model (Sari 1998) ---------- //
-    emissivity_models["sync"] = [&](const double nu, const Dict& P, const Blast& blast) {
+    radiation_models["sync"] = [&](const double nu, const Dict& P, const Blast& blast) {
         double eps_e, eps_b, p;
         try {
             eps_e = P.at("eps_e");
@@ -64,11 +64,12 @@ void Models::registerEmissivity() {
             }
         }
 
-        return emissivity;
+        double isotropic_intensity = emissivity * blast.dR;
+        return isotropic_intensity;
     };
 
     // Bonus! deep newtonian phase correction
-    emissivity_models["sync_dnp"] = [&](const double nu, const Dict& P, const Blast& blast) {
+    radiation_models["sync_dnp"] = [&](const double nu, const Dict& P, const Blast& blast) {
         double eps_e, eps_b, p;
         try {
             eps_e = P.at("eps_e");
@@ -122,13 +123,14 @@ void Models::registerEmissivity() {
             }
         }
 
-        return emissivity;
+        double isotropic_intensity = emissivity * blast.dR;
+        return isotropic_intensity;
     };
 
     // ---------- define your own model below ---------- //
-    // emissivity_models["model_name"] = [](const double nu, const Dict& P, const Blast& blast) {
+    // radiation_models["model_name"] = [](const double nu, const Dict& P, const Blast& blast) {
     //     ...
-    //     return emissivity;
+    //     return isotropic_intensity;
     // }
 }
 

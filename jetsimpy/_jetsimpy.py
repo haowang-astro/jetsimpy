@@ -97,8 +97,8 @@ class Jet:
         # config parameters
         self._jet.configParameters(P)
 
-        # config emissivity model
-        self._jet.configEmissivity(model)
+        # config radiation model
+        self._jet.configIntensity(model)
 
         try:
             I = self._jet.calculateIntensity(t, nu, theta, phi)
@@ -112,11 +112,11 @@ class Jet:
         # config parameters
         self._jet.configParameters(P)
 
-        # config emissivity model
+        # config radiation model
         if isinstance(model, str):
-            self._jet.configEmissivity(model)
+            self._jet.configIntensity(model)
         else:
-            self._jet.configEmissivityPy(model)
+            self._jet.configIntensityPy(model)
 
         try:
             L = self._jet.calculateLuminosity(t, nu, rtol, max_iter, force_return)
@@ -129,11 +129,11 @@ class Jet:
         # config parameters
         self._jet.configParameters(P)
 
-        # config emissivity model
+        # config radiation model
         if isinstance(emissitivy_model, str):
-            self._jet.configEmissivity(emissitivy_model)
+            self._jet.configIntensity(emissitivy_model)
         else:
-            self._jet.configEmissivityPy(emissitivy_model)
+            self._jet.configIntensityPy(emissitivy_model)
 
         # config average model
         if isinstance(average_model, str):
@@ -190,8 +190,8 @@ class Jet:
         # config parameters
         self._jet.configParameters(P)
 
-        # config emissivity model
-        self._jet.configEmissivity(model)
+        # config Intensity model
+        self._jet.configIntensity(model)
 
         # intensity
         try:

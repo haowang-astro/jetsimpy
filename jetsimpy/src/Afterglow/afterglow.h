@@ -16,10 +16,10 @@ public:
     Afterglow() {}
     void initialize(SimBox& sim_box, EATS& eats);          // initialize object
     void configParameters(const Dict& param);              // configurate parameter dictionary
-    void configEmissivity(const std::string& model_name);  // configure emissivity model
+    void configIntensity(const std::string& model_name);  // configure radiation model
     void configAvgModel(const std::string& model_name);    // configure average models
 
-    void configEmissivityPy(py::function py_f);            // configure emissivity model from python side
+    void configIntensityPy(py::function py_f);            // configure Intensity model from python side
     void configAvgModelPy(py::function py_f);              // configure average models from python side
 
     // calculate the specific intensity
@@ -40,7 +40,7 @@ private:
     Dict param;     // parameter dictionary from python side
 
     // model function (pointer) to be called in integration
-    std::function<double(const double, const Dict&, const Blast&)> emissivity_model;
+    std::function<double(const double, const Dict&, const Blast&)> radiation_model;
     std::function<double(const double, const Dict&, const Blast&)> avg_model;
 
     // model object to store model functions

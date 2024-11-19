@@ -145,16 +145,16 @@ void Jet::configParameters(const Dict& param) {
     afterglow.configParameters(param);
 }
 
-void Jet::configEmissivity(const std::string& model_name) {
-    afterglow.configEmissivity(model_name);
+void Jet::configIntensity(const std::string& model_name) {
+    afterglow.configIntensity(model_name);
 }
 
 void Jet::configAvgModel(const std::string& model_name) {
     afterglow.configAvgModel(model_name);
 }
 
-void Jet::configEmissivityPy(py::function py_f) {
-    afterglow.configEmissivityPy(py_f);
+void Jet::configIntensityPy(py::function py_f) {
+    afterglow.configIntensityPy(py_f);
 }
 
 void Jet::configAvgModelPy(py::function py_f) {

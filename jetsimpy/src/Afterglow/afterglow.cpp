@@ -4,7 +4,7 @@ void Afterglow::initialize(SimBox& sim_box, EATS& eats) {
     this->eats = &eats;
     //eats.feedData(sim_box, tool);
     theta_data = &(sim_box.getTheta());
-    models.registerEmissivity();
+    models.registerIntensity();
     models.registerAvgModels();
 }
 
@@ -22,12 +22,12 @@ void Afterglow::configParameters(const Dict& param) {
     this->param = param;
 }
 
-void Afterglow::configEmissivity(const std::string& model_name) {
+void Afterglow::configIntensity(const std::string& model_name) {
     try {
-        emissivity_model = models.emissivity_models.at(model_name);
+        radiation_model = models.radiation_models.at(model_name);
     }
     catch (const std::exception& e) {
-        throw std::runtime_error("Emissivity: Model name not found!");
+        throw std::runtime_error("There is no such radiation model: '" + model_name + "'.");
     }
 }
 
@@ -36,15 +36,15 @@ void Afterglow::configAvgModel(const std::string& model_name) {
         avg_model = models.avg_models[model_name];
     }
     catch (const std::exception& e) {
-        throw std::runtime_error("Weighted average: Model name not found!");
+        throw std::runtime_error("There is no such weighted average model: '" + model_name + "'.");
     }
 }
 
-void Afterglow::configEmissivityPy(py::function py_f) {
-    emissivity_model = [py_f](const double nu, const Dict& P, const Blast& blast) {
+void Afterglow::configIntensityPy(py::function py_f) {
+    radiation_model = [py_f](const double nu, const Dict& P, const Blast& blast) {
         py::object obj = py_f(nu, P, blast);
-        double emissivity = obj.cast<double>();
-        return emissivity;
+        double intensity = obj.cast<double>();
+        return intensity;
     };
 }
 
@@ -66,21 +66,21 @@ double Afterglow::Intensity(const double Tobs, const double nu, const double the
     // nu in comoving frame
     double nu_src = nu_z / blast.doppler;
     
-    // solve emissivity at comoving frame
-    double emissivity = emissivity_model(nu_src, param, blast);
+    // solve intensity at comoving frame
+    double intensity = radiation_model(nu_src, param, blast);
 
     // convert to intensity at observer's frame
-    return emissivity / 4.0 / PI * blast.dR * blast.doppler * blast.doppler * blast.doppler;
+    return intensity / 4.0 / PI * blast.doppler * blast.doppler * blast.doppler;
 }
 
 double Afterglow::dL_dOmega(const double Tobs_z, const double nu_z, const double theta, const double phi) {
     // nu in comoving frame
     double nu_src = nu_z / blast.doppler;
     
-    // solve emissivity at comoving frame
-    double emissivity = emissivity_model(nu_src, param, blast);
+    // solve intensity at comoving frame
+    double intensity = radiation_model(nu_src, param, blast);
 
-    return emissivity * blast.dR * blast.R * blast.R * blast.doppler * blast.doppler * blast.doppler;
+    return intensity * blast.R * blast.R * blast.doppler * blast.doppler * blast.doppler;
 }
 
 double Afterglow::Luminosity(const double Tobs, const double nu, const double rtol, const int max_iter, const bool force_return) {
