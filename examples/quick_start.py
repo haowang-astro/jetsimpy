@@ -4,8 +4,8 @@ import jetsimpy
 
 # put the parameters in a dictionary
 P = dict(
-    Eiso = 1e52,        # Isotropic equivalent energy
-    lf = 300,           # Lorentz factor
+    Eiso = 1e52,        # Core isotropic equivalent energy
+    lf = 300,           # Core Lorentz factor
     theta_c = 0.1,      # half opening angle
     n0 = 1,             # ism number density
     A = 0,              # wind number density amplitude
@@ -15,7 +15,7 @@ P = dict(
     theta_v = 0.0,      # viewing angle (rad)
     d = 474.33,         # distance (Mpc)
     z = 0.1,            # redshift
-    s = 6,              # required for power-law jet
+    s = 6,              # power-law jet slope (required for power-law jet)
 )
 
 # define the observing time and frequency
