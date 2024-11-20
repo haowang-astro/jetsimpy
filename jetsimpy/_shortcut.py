@@ -10,7 +10,7 @@ def FluxDensity_tophat(t, nu, P, tmin=10.0, tmax=1e10, spread=True, cal_level=1,
         P["n0"],                       # ism number density scale
         tmin=tmin,                     # [simulation start time]: (s)
         tmax=tmax,                    # [simulation end time]: (s)
-        grid=NorthPole(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
+        grid=ForwardJetRes(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
         tail=True,                     # [isotropic tail]: add an extremely low energy low velocity isotropic tail for safty
         spread=spread,                   # w/wo spreading effect 
         cal_level=cal_level,                   # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (dangerous)
@@ -39,7 +39,7 @@ def FluxDensity_gaussian(t, nu, P, tmin=10.0, tmax=1e10, spread=True, cal_level=
         P["n0"],                       # ism number density scale
         tmin=tmin,                     # [simulation start time]: (s)
         tmax=tmax,                    # [simulation end time]: (s)
-        grid=NorthPole(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
+        grid=ForwardJetRes(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
         tail=True,                     # [isotropic tail]: add an extremely low energy low velocity isotropic tail for safty
         spread=spread,                   # w/wo spreading effect 
         cal_level=cal_level,                   # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (dangerous)
@@ -68,7 +68,7 @@ def FluxDensity_powerlaw(t, nu, P, tmin=10.0, tmax=1e10, spread=True, cal_level=
         P["n0"],                       # ism number density scale
         tmin=tmin,                     # [simulation start time]: (s)
         tmax=tmax,                    # [simulation end time]: (s)
-        grid=NorthPole(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
+        grid=ForwardJetRes(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
         tail=True,                     # [isotropic tail]: add an extremely low energy low velocity isotropic tail for safty
         spread=spread,                   # w/wo spreading effect 
         cal_level=cal_level,                   # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (dangerous)

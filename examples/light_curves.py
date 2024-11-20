@@ -27,7 +27,7 @@ jet1 = jetsimpy.Jet(
     P["A"],                        # wind number density scale
     P["n0"],                       # ism number density scale
     spread=False,                  # w/wo spreading effect 
-    grid=jetsimpy.NorthPole(P["theta_c"], 129)  # resolution
+    grid=jetsimpy.ForwardJetRes(P["theta_c"], 129)  # resolution
 )
 
 # jet with spreading (show full argument and keyword list)
@@ -38,7 +38,7 @@ jet2 = jetsimpy.Jet(
     P["n0"],                       # [ism density scale]: n = nwind * (r / 1e17)^-2 + nism (cm^-3)
     tmin=10.0,                     # [simulation start time]: (s)
     tmax=3.2e9,                    # [simulation end time]: (s)
-    grid=jetsimpy.NorthPole(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
+    grid=jetsimpy.ForwardJetRes(P["theta_c"], 129),    # [cell edge angles]: must start with 0 and end with pi.
     tail=True,                     # [isotropic tail]: add an extremely low energy low velocity isotropic tail for safty
     spread=True,                   # w/wo spreading effect 
     cal_level=1,                   # [calibration level]: 0: no calibration. 1: BM all time. 2: smoothly go from BM to ST (dangerous)
@@ -65,7 +65,7 @@ flux2 = jet2.FluxDensity(
     tsecond,           # [second] observing time span
     nu,                # [Hz]     observing frequency
     P,                 # parameter dictionary
-    model="sync",      # emissivity model
+    model="sync",      # radiation model
     rtol=1e-3,         # integration tolerance
     max_iter=100,
     force_return=True

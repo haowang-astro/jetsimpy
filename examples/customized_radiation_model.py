@@ -78,7 +78,7 @@ jet = jetsimpy.Jet(
     0.0,               # wind number density scale
     P["n0"],           # ism number density scale
     tmax=1e11,
-    grid=jetsimpy.NorthPole(P["theta_c"], 129)
+    grid=jetsimpy.ForwardJetRes(P["theta_c"], 129)
 )
 
 # flux density (default synchrotron model)

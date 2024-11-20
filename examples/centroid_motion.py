@@ -27,7 +27,7 @@ jet1 = jetsimpy.Jet(
     P["A"],          # scale of wind density
     P["n0"],         # constant number density
     spread=False,    # w/wo spreading effect 
-    grid=jetsimpy.NorthPole(P["theta_c"], 129),
+    grid=jetsimpy.ForwardJetRes(P["theta_c"], 129),
 )
 
 # jet with spreading
@@ -36,7 +36,7 @@ jet2 = jetsimpy.Jet(
     P["A"],          # scale of wind density
     P["n0"],         # constant number density
     spread=True,     # w/wo spreading effect
-    grid=jetsimpy.NorthPole(P["theta_c"], 129),
+    grid=jetsimpy.ForwardJetRes(P["theta_c"], 129),
 )
 
 # ---------- (step 2) calculate centroid motion ---------- #

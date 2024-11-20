@@ -27,6 +27,7 @@ jet = jetsimpy.Jet(
     jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
     P["A"],          # scale of wind density
     P["n0"],         # constant number density
+    grid=jetsimpy.ForwardJetRes(P["theta_c"], 129),   # resolution
 )
 
 # ---------- (step 2) calculate intensity at some pixels ---------- #
