@@ -27,6 +27,7 @@ jet1 = jetsimpy.Jet(
     P["A"],                        # wind number density scale
     P["n0"],                       # ism number density scale
     spread=False,                  # w/wo spreading effect 
+    grid=jetsimpy.NorthPole(P["theta_c"], 129)  # resolution
 )
 
 # jet with spreading (show full argument and keyword list)
