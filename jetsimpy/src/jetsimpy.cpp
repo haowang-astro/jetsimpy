@@ -169,12 +169,12 @@ double Jet::calculateAvgModel(double Tobs, double nu, double rtol, const int max
     return afterglow.integrateModel(Tobs, nu, rtol, max_iter, force_return);
 }
 
-double Jet::WeightedAverage(double Tobs, double nu, double rtol) {
+double Jet::WeightedAverage(double Tobs, double nu, double rtol, const int max_iter, const bool force_return) {
     // save time
     if (Tobs == 0.0) return 0.0;
 
-    double luminosity = calculateLuminosity(Tobs, nu, rtol);
-    double integral = calculateAvgModel(Tobs, nu, rtol);
+    double luminosity = calculateLuminosity(Tobs, nu, rtol, max_iter, force_return);
+    double integral = calculateAvgModel(Tobs, nu, rtol, max_iter, force_return);
 
     return integral / luminosity;
 }

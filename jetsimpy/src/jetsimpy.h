@@ -38,7 +38,7 @@ public:
     double calculateIntensity(double Tobs, double nu, double theta, double phi);    // intensity in Jet coordinate
     double calculateLuminosity(double Tobs, double nu, double rtol, const int max_iter = 50, const bool force_return = true);    // integrate luminosity
     double calculateAvgModel(double Tobs, double nu, double rtol, const int max_iter = 50, const bool force_return = true);      // integrate average model
-    double WeightedAverage(double Tobs, double nu, double rtol);
+    double WeightedAverage(double Tobs, double nu, double rtol, const int max_iter = 50, const bool force_return = true);
     double IntensityOfPixel(const double Tobs, const double nu, const double x_tilde, const double y_tilde);
 
 private:
