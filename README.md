@@ -3,6 +3,16 @@ Hydrodynamic simulations of relativistic blastwave with tabulated angular energy
 
 Code paper: [Wang et al. 2024](https://arxiv.org/abs/2402.19359).
 
+## Updates
+Big updates:
+* One can now control the maximum iteration number for flux density integration and enforce the program to return a meaningful value even if the integration has not achieved the desired accuracy. This way one can significantly reduce the amount of runtime errors which frequently interrupt the program.
+* To define your own radiation model, you now need to define the "solid angle integrated specific intensity" instead of "emissivity" in the previous version. This way it makes more sense to introduce optical depth in the model. The relation is $I_\nu=\frac{j_\nu}{\alpha_\nu}(1-e^{-\alpha_\nu\Delta R})$. For optically thin case ($\alpha_\nu\sim 0$) this relation reduces to $I_\nu=j_\nu\Delta R$.
+
+Small updates:
+* For analytic jet profiles (top-hat, Gaussian, power-law), the process to generate synthetic light curves or spectrum is significantly simplified. See "examples/quick_start.py" for more details.
+* Some updates in the documentation. The importance of "resolution" is now highlighted.
+* The built-in resolution setups are renamed to increase readability. Previous names are still supported for now.
+
 ## Documentation
 A brief documentation is now available at: [https://jetsimpy.readthedocs.io/](https://jetsimpy.readthedocs.io/).
 
@@ -16,7 +26,7 @@ A brief documentation is now available at: [https://jetsimpy.readthedocs.io/](ht
 * Apparent superluminal motion
 * Sky map and Gaussian equivalent image size
 
-Additionally, you can add your own emissivity model by defining a lambda function in a [c++ source file](jetsimpy/src/Afterglow/models.cpp). This might be helpful if you have a more complicated model such as Synchrotron self-absorption or other cool stuffs. After adding your own model, just install the package as usual and refer to this model with its model name from Python side.
+Additionally, you can add your own radiation model by defining a lambda function in a [c++ source file](jetsimpy/src/Afterglow/models.cpp). This might be helpful if you have a more complicated model such as Synchrotron self-absorption or other cool stuffs. After adding your own model, just install the package as usual and refer to this model with its model name from Python side.
 
 ### These features are not supported yet:
 * Reverse shock
@@ -49,6 +59,7 @@ P = dict(
     lf = 600,           # initial Lorentz factor
     theta_c = 0.1,      # half opening angle
     n0 = 1,             # ism number density
+    A = 0,              # wind number density amplitude
     eps_e = 0.1,        # epsilon_e
     eps_b = 0.01,       # epsilon_b
     p = 2.17,           # electron power index
@@ -62,19 +73,8 @@ tday = np.logspace(-2, 3, 100)
 tsecond = tday * 3600 * 24
 nu = 1e15
 
-# hydro simulation
-jet = jetsimpy.Jet(
-    jetsimpy.Gaussian(P["theta_c"], P["Eiso"], lf0=P["lf"]),    # jet profile
-    0.0,               # wind number density scale
-    P["n0"],           # ism number density scale
-)
-
-# flux density [mJy]
-flux_density = jet.FluxDensity(
-    tsecond,           # [second] observing time span
-    nu,                # [Hz]     observing frequency
-    P,                 # parameter dictionary
-)
+# flux density
+fd_gaussian = jetsimpy.FluxDensity_gaussian(tsecond, nu, P)
 ```
 
 More examples are available in the example folder. 

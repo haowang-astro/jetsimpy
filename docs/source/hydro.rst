@@ -95,7 +95,7 @@ The code provides some built-in resolution setup for jet profiles with well-defi
     :param int npoints: number of cell edges
     :return: np.array: array of cell edges
 
-.. py:function:: jetsimpy.NorthPole(theta_c, npoints)
+.. py:function:: jetsimpy.ForwardJetRes(theta_c, npoints)
 
     Resolution optimized for forward-jet only. 
 
@@ -103,7 +103,7 @@ The code provides some built-in resolution setup for jet profiles with well-defi
     :param int npoints: number of cell edges
     :return: np.array: array of cell edges
 
-.. py:function:: jetsimpy.SouthPole(theta_c, npoints)
+.. py:function:: jetsimpy.CounterJetRes(theta_c, npoints)
 
     Resolution optimized for counter-jet only. 
 
@@ -111,7 +111,7 @@ The code provides some built-in resolution setup for jet profiles with well-defi
     :param int npoints: number of cell edges
     :return: np.array: array of cell edges
 
-.. py:function:: jetsimpy.BothPoles(theta_c, npoints)
+.. py:function:: jetsimpy.ForwardCounterJetRes(theta_c, npoints)
 
     Resolution optimized for forward-jet and counter-jet.
 
