@@ -1,10 +1,7 @@
 #ifndef MODELS
 #define MODELS
 
-#include <cmath>
-#include <map>
-#include <string>
-#include <functional>
+#include "../environment.h"
 #include "blast.h"
 
 using Dict = std::map<std::string, double>;
