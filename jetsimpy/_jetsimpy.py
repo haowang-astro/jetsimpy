@@ -125,6 +125,24 @@ class Jet:
         
         return L * (1 + P["z"]) / 4 / np.pi / (P["d"] * _MPC) ** 2 / _mJy
     
+    # flux [erg/s/cm^2]
+    def Flux(self, t, nu1, nu2, P, model="sync", rtol=1e-3, max_iter=100, force_return=True):
+        # config parameters
+        self._jet.configParameters(P)
+
+        # config radiation model
+        if isinstance(model, str):
+            self._jet.configIntensity(model)
+        else:
+            self._jet.configIntensityPy(model)
+        
+        try:
+            L = self._jet.calculateFreqIntL(t, nu1, nu2, rtol, max_iter, force_return)
+        except Exception as e:
+            raise e
+        
+        return L * (1 + P["z"]) / 4 / np.pi / (P["d"] * _MPC) ** 2
+    
     def WeightedAverage(self, t, nu, P, radiation_model="sync", average_model="offset", rtol=1e-3, max_iter=100, force_return=True):
         # config parameters
         self._jet.configParameters(P)

@@ -165,6 +165,10 @@ double Jet::calculateLuminosity(double Tobs, double nu, double rtol, const int m
     return afterglow.Luminosity(Tobs, nu, rtol, max_iter, force_return);
 }
 
+double Jet::calculateFreqIntL(double Tobs, double nu1, double nu2, double rtol, const int max_iter, const bool force_return) {
+    return afterglow.FreqIntL(Tobs, nu1, nu2, rtol, max_iter, force_return);
+}
+
 double Jet::calculateAvgModel(double Tobs, double nu, double rtol, const int max_iter, const bool force_return) {
     return afterglow.integrateModel(Tobs, nu, rtol, max_iter, force_return);
 }

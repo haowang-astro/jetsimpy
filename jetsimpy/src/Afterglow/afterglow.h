@@ -28,6 +28,9 @@ public:
     // total luminosity
     double Luminosity(const double Tobs, const double nu, const double rtol, const int max_iter = 50, const bool force_return = true);
 
+    // frequency integrated luminosity
+    double FreqIntL(const double Tobs, const double nu1, const double nu2, const double rtol, const int max_iter = 50, const bool force_return = true);
+
     // integrate average model with dL_dOmega as the weight
     double integrateModel(const double Tobs, const double nu, const double rtol, const int max_iter = 50, const bool force_return = true);
 

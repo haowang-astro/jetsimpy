@@ -127,6 +127,15 @@ double Afterglow::Luminosity(const double Tobs, const double nu, const double rt
     return luminosity;
 }
 
+double Afterglow::FreqIntL(const double Tobs, const double nu1, const double nu2, const double rtol, const int max_iter, const bool force_return) {
+    auto f = [&](double nu) {
+        return Luminosity(Tobs, nu, rtol, max_iter, force_return);
+    };
+
+    double frequency_integrated_luminosity = Adaptive_1D(f, {nu1, nu2}, 0.0, rtol, max_iter, force_return);
+    return frequency_integrated_luminosity;
+}
+
 double Afterglow::integrateModel(const double Tobs, const double nu, const double rtol, const int max_iter, const bool force_return) {
     double Tobs_z = Tobs / (1 + z);
     double nu_z = nu * (1 + z);
