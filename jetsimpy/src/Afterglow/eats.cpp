@@ -235,76 +235,19 @@ void EATS::solveBlast_type1(double Tobs_z, double theta, double phi, double thet
 }
 
 double EATS::solveEATS(double Tobs_z, double theta, double phi, double theta_v) {
-    // find theta index
-    int theta_index1;
-    int theta_index2;
+    // find theta
+    int theta_index1, theta_index2;
     findThetaIndex(theta, theta_index1, theta_index2);
 
-    Array1D val, val_l, val_r;
-    if (theta_index1 == theta_index2) { // near poles
-        // solve val_l
-        {
-            // compute mu within the cell (east hemisphere)
-            double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi) * std::sin(theta_v);
+    // cos angle
+    double mu = std::cos(theta) * std::cos(theta_v) + std::sin(theta) * std::cos(phi) * std::sin(theta_v);
+    
+    // find t
+    double t;
+    int t_index1, t_index2;
+    solveInterpolatedEATS(mu, Tobs_z, theta, t, t_index1, t_index2);
 
-            // solve primitive
-            val_l = solvePrimitive(mu, Tobs_z, theta_index1);
-        }
-
-        // solve val_r
-        {
-            // compute mu (negative phi, west hemisphere)
-            double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi + PI) * std::sin(theta_v);
-
-            // solve primitive
-            val_r = solvePrimitive(mu, Tobs_z, theta_index2);
-        }
-        
-        // interpolate val over theta
-        val = Array(6);
-        for (int i = 0; i < 6; ++i) {
-            val[i] = tool->linear(
-                theta,
-                (*theta_data)[theta_index1],
-                (theta_index1 == 0) ? - (*theta_data)[theta_index1] : 2.0 * PI - (*theta_data)[theta_index1],
-                val_l[i],
-                val_r[i]
-            );
-        }
-    }
-    else {
-        // solve val_l
-        {
-            // compute mu
-            double mu = std::cos((*theta_data)[theta_index1]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index1]) * std::cos(phi) * std::sin(theta_v);
-
-            // solve primitive
-            val_l = solvePrimitive(mu, Tobs_z, theta_index1);
-        }
-
-        // solve val_r
-        {
-            // compute mu
-            double mu = std::cos((*theta_data)[theta_index2]) * std::cos(theta_v) + std::sin((*theta_data)[theta_index2]) * std::cos(phi) * std::sin(theta_v);
-
-            // solve primitive
-            val_r = solvePrimitive(mu, Tobs_z, theta_index2);
-        }
-
-        // interpolate val over theta
-        val = Array(6);
-        for (int i = 0; i < 6; ++i) {
-            val[i] = tool->linear(
-                theta,
-                (*theta_data)[theta_index1],
-                (*theta_data)[theta_index2],
-                val_l[i],
-                val_r[i]
-            );
-        }
-    }
-
-    return val[5];
+    return t;
 }
 
 void EATS::solveInterpolatedEATS(double mu, double Tobs_z, double theta, double& t, int& t_index1, int& t_index2) {
